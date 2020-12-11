@@ -19,6 +19,8 @@ use TwentySixB\Translations\Input\Input;
  * @package    TODO:
  * @subpackage TODO:
  * @author     TODO:
+ *
+ * @coversDefaultClass \TwentySixB\Translations\Config\Config
  */
 class ConfigTest extends TestCase {
 
@@ -27,7 +29,9 @@ class ConfigTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getData
+	 * @covers ::__construct
 	 * @covers ::get
+	 * @covers ::get_config
 	 * @testdox get - returns what is expected
 	 *
 	 * @param  array  $expected   Expected return of get.
@@ -49,6 +53,7 @@ class ConfigTest extends TestCase {
 	 *
 	 * @since  0.0.0
 	 * @covers ::get
+	 * @covers ::__construct
 	 * @testdox get - client does not exist
 	 *
 	 * @return void
@@ -78,6 +83,7 @@ class ConfigTest extends TestCase {
 	 * Test get when the config does not have a 'client' value.
 	 *
 	 * @since  0.0.0
+	 * @covers ::__construct
 	 * @covers ::get
 	 * @testdox get - config doesn't have a 'client' value
 	 *
