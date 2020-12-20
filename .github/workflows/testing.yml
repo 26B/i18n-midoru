@@ -16,6 +16,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Switch PHP Version
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.3'
+
     - name: Validate composer.json and composer.lock files
       run: composer validate --no-interaction
 
