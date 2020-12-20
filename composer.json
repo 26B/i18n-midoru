@@ -1,0 +1,28 @@
+{
+    "name": "26B/i18n-midoru",
+    "description": "Handle translation operation with ease (download and upload).",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "loco/loco": "^2.0"
+    },
+    "require-dev": {
+      "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+      "psr-4": {
+        "TwentySixB\\Translations\\": "lib/"
+      }
+    },
+    "authors": [
+        {
+            "name": "26B",
+            "email": "hello@26b.io"
+        }
+    ],
+    "scripts": {
+      "test": [
+        "phpunit --testdox --colors=always"
+      ]
+    }
+}

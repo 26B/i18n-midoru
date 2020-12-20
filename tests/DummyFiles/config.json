@@ -1,0 +1,16 @@
+{
+  "test_project" : {
+    "key" : "test_key",
+    "export" :  {
+      "locale": [ "pt_PT", "fr" ],
+      "domain": "test_domain",
+      "path"  : "test_output_path/",
+      "ext"   : "po",
+      "format": "gettext",
+      "client": "localise"
+    },
+    "import" : {
+      "locale": [ "pt_PT" ]
+    }
+  }
+}

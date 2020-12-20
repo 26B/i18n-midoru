@@ -1,0 +1,5 @@
+vendor/
+.phpunit.result.cache
+wp-cli.phar
+.DS_Store
+.vscode/
