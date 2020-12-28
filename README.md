@@ -1,5 +1,6 @@
 # Translation Helper
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f9a5efb2d2034e36a242e47ea4d1128c)](https://app.codacy.com/gh/26B/i18n-midoru?utm_source=github.com&utm_medium=referral&utm_content=26B/i18n-midoru&utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/60718d18625e4201879774c318e5410f)](https://www.codacy.com/gh/26B/i18n-midoru/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=26B/i18n-midoru&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/60718d18625e4201879774c318e5410f)](https://www.codacy.com/gh/26B/i18n-midoru/dashboard?utm_source=github.com&utm_medium=referral&utm_content=26B/i18n-midoru&utm_campaign=Badge_Coverage)
 
