@@ -4,6 +4,7 @@ namespace TwentySixB\Translations;
 
 use Exception;
 use TwentySixB\Translations\Config\Config;
+use TwentySixB\Translations\Config\Project;
 use TwentySixB\Translations\Input\Input;
 use TwentySixB\Translations\Translations\Download;
 use TwentySixB\Translations\Translations\PotMaker;
@@ -39,9 +40,8 @@ class Translations {
 			print( "Downloader created successfully.\n" );
 
 			$downloads = $downloader->download();
-			if ( $config->get_format() === 'jed' && $config->get_wrap_jed() ) {
-				$downloads = $this->wrap_jsons( $downloads );
-			}
+
+			$downloads = $this->apply_transformer( $downloads, $config );
 
 			$downloader->save( $downloads );
 			print( "Translation files downloaded and saved successfully.\n" );
@@ -92,21 +92,18 @@ class Translations {
 	}
 
 	/**
-	 * Wrap jsons with a layer with the key 'locale_data'.
+	 * Apply transformer given the format for the data.
 	 *
-	 * @since  0.0.0
-	 * @param  array $jsons
-	 * @return array
+	 * @since 0.0.0
+	 * @return mixed
 	 */
-	private function wrap_jsons( array $jsons ) : array {
-		foreach ( $jsons as $key => $json ) {
-			$jsons[ $key ] = json_encode(
-				[
-					'locale_data' => json_decode( $json, true ),
-				],
-				JSON_PRETTY_PRINT
-			);
+	private function apply_transformer( $data, Project $config ) {
+		//TODO: receive outside classes.
+		$transformer_class = __NAMESPACE__ . '\\Transformers\\' . ucfirst( $config->get_format() );
+		if ( class_exists( $transformer_class ) ) {
+			$transfomer = new $transformer_class();
+			return $transfomer->transform( $data, $config );
 		}
-		return $jsons;
+		return $data;
 	}
 }
