@@ -89,6 +89,7 @@ class Upload extends ServiceBase {
 	 * @param  string $locale  Locale to import.
 	 * @return string
 	 * @throws SourceFileNotFound
+	 * @throws Exception
 	 */
 	private function get_data_to_import( string $locale ) : string {
 		$path = $this->config->get_path( $locale );

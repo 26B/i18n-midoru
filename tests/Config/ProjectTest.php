@@ -217,6 +217,8 @@ class ProjectTest extends TestCase {
 		$this->assertEquals( $expected, ( new Project( $config ) )->get_path( $locale ) );
 	}
 
+	//TODO: test exception thrown in get_path
+
 	/**
 	 * Test get_source_path returns the source_path in the config.
 	 *
@@ -308,7 +310,6 @@ class ProjectTest extends TestCase {
 	 */
 	public function getPathData() : array {
 		$path      = 'output/path/';
-		$filename  = 'test_filename';
 		$domain    = 'test_domain';
 		$js_handle = 'test_handle';
 		$ext       = 'po';
@@ -318,7 +319,7 @@ class ProjectTest extends TestCase {
 					'ext'  => $ext,
 				],
 				'pt_PT',
-				"./pt_PT.{$ext}"
+				"./pt_PT.{$ext}",
 			],
 			'No filename or domain'                          => [
 				[
@@ -326,16 +327,25 @@ class ProjectTest extends TestCase {
 					'ext'  => $ext,
 				],
 				'pt_PT',
-				"{$path}pt_PT.{$ext}"
+				"{$path}pt_PT.{$ext}",
 			],
-			'Filename'                                       => [
+			'Filename with no arguments'                                       => [
 				[
 					'path'     => $path,
 					'ext'      => $ext,
-					'filename' => $filename,
+					'filename' => 'simple_filename',
 				],
 				'pt_PT',
-				"{$path}{$filename}-pt_PT.{$ext}"
+				"{$path}simple_filename",
+			],
+			'Filename with arguments'                                       => [
+				[
+					'path'     => $path,
+					'ext'      => $ext,
+					'filename' => 'test-{$locale}.{$ext}',
+				],
+				'pt_PT',
+				"{$path}test-pt_PT.{$ext}",
 			],
 			'Domain'                                         => [
 				[
@@ -344,28 +354,28 @@ class ProjectTest extends TestCase {
 					'domain' => $domain,
 				],
 				'pt_PT',
-				"{$path}{$domain}-pt_PT.{$ext}"
+				"{$path}{$domain}-pt_PT.{$ext}",
 			],
 			'Domain and Filename, filename takes precedence' => [
 				[
 					'path'     => $path,
 					'ext'      => $ext,
 					'domain'   => $domain,
-					'filename' => $filename,
+					'filename' => 'test-{$domain}-{$locale}.{$ext}',
 				],
 				'pt_PT',
-				"{$path}{$filename}-pt_PT.{$ext}"
+				"{$path}test-{$domain}-pt_PT.{$ext}",
 			],
 			'With js-handle' => [
 				[
 					'path'      => $path,
 					'ext'       => $ext,
 					'domain'    => $domain,
-					'filename'  => $filename,
-					'js-handle' => $js_handle
+					'filename'  => 'test-{$domain}-{$locale}-{$js-handle}.{$ext}',
+					'js-handle' => $js_handle,
 				],
 				'pt_PT',
-				"{$path}{$filename}-pt_PT-{$js_handle}.{$ext}"
+				"{$path}test-{$domain}-pt_PT-{$js_handle}.{$ext}",
 			],
 			'Theme' => [
 				[
@@ -387,30 +397,36 @@ class ProjectTest extends TestCase {
 	 */
 	public function getPotPathData(): array {
 		$destination = 'output/path/';
-		$filename    = 'test_filename';
 		$domain      = 'test_domain';
 		return [
-			'Filename'                                       => [
+			'Filename without any arguments'                                       => [
 				[
 					'destination' => $destination,
-					'filename'    => $filename,
+					'filename'    => 'simple_filename',
 				],
-				"{$destination}{$filename}.pot"
+				"{$destination}simple_filename",
+			],
+			'Filename with arguments'                                       => [
+				[
+					'destination' => $destination,
+					'filename'    => 'simple_filename.{$ext}',
+				],
+				"{$destination}simple_filename.pot",
 			],
 			'Domain'                                         => [
 				[
 					'destination' => $destination,
 					'domain'      => $domain,
 				],
-				"{$destination}{$domain}.pot"
+				"{$destination}{$domain}.pot",
 			],
 			'Domain and Filename, filename takes precedence' => [
 				[
 					'destination' => $destination,
 					'domain'      => $domain,
-					'filename'    => $filename,
+					'filename'    => 'test-{$domain}.{$ext}',
 				],
-				"{$destination}{$filename}.pot"
+				"{$destination}test-{$domain}.pot",
 			],
 		];
 	}
