@@ -37,19 +37,29 @@ class Download extends ServiceBase {
 	 */
 	public function download() : array {
 		$this->authenticate();
-		$downloads = [];
+		$downloads    = [];
+		$locales      = $this->config->get_locales();
+		$first_locale = current( $locales );
 
-		foreach ( $this->config->get_locales() as $locale ) {
+		foreach ( $locales as $locale ) {
+
+			// Wait for 100 ms between requests, if we are not on the first request.
+			if ( $locale !== $first_locale ) {
+				usleep(100000);
+			}
+
 			$export = $this->config->get_client()->export( $this->make_export_config( $locale ) );
 
 			if ( $export === '' ) {
 				printf( "Download for language '{$locale}' was returned empty and was not saved.\n" );
 				continue;
 			}
+
 			printf( "Got download for language '{$locale}'.\n" );
 
 			$downloads[ $locale ] = $export;
 		}
+
 		return $downloads;
 	}
 
