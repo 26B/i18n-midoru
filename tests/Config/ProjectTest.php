@@ -220,6 +220,7 @@ class ProjectTest extends TestCase {
 	 * @dataProvider getPathData
 	 * @covers ::__construct
 	 * @covers ::get_path
+	 * @covers ::parse_filename
 	 * @testdox get_path - returns what is expected
 	 *
 	 * @param  array  $config   Config for Project.
@@ -239,6 +240,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @covers ::__construct
 	 * @covers ::get_path
+	 * @covers ::parse_filename
 	 * @testdox get_path - argument in filename is not available
 	 *
 	 * @return void
@@ -289,6 +291,7 @@ class ProjectTest extends TestCase {
 	 * @dataProvider getPotPathData
 	 * @covers ::__construct
 	 * @covers ::get_pot_path
+	 * @covers ::parse_filename
 	 * @testdox get_pot_path - returns what is expected
 	 *
 	 * @return void
@@ -414,6 +417,16 @@ class ProjectTest extends TestCase {
 				"{$path}test-{$domain}-pt_PT.{$ext}",
 			],
 			'With js-handle' => [
+				[
+					'path'      => $path,
+					'ext'       => $ext,
+					'domain'    => $domain,
+					'js-handle' => $js_handle,
+				],
+				'pt_PT',
+				"{$path}{$domain}-pt_PT-{$js_handle}.{$ext}",
+			],
+			'With js-handle inside filename' => [
 				[
 					'path'      => $path,
 					'ext'       => $ext,
