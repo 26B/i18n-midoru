@@ -19,6 +19,8 @@ use TwentySixB\Translations\Input\Input;
  * @package    TODO:
  * @subpackage TODO:
  * @author     TODO:
+ *
+ * @coversDefaultClass TwentySixB\Translations\Config\Config
  */
 class ConfigTest extends TestCase {
 

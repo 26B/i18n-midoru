@@ -16,6 +16,8 @@ use TwentySixB\Translations\Input\File;
  * @package    TODO:
  * @subpackage TODO:
  * @author     TODO:
+ *
+ * @coversDefaultClass TwentySixB\Translations\Input\File
  */
 class FileTest extends TestCase {
 
