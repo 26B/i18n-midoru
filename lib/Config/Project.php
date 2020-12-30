@@ -2,8 +2,8 @@
 
 namespace TwentySixB\Translations\Config;
 
-use Exception;
 use TwentySixB\Translations\Clients\Client;
+use TwentySixB\Translations\Exceptions\FilenameArgumentNotAvailable;
 use TwentySixB\Translations\Exceptions\NoFilenameAvailableForPotFile;
 use TwentySixB\Translations\Exceptions\NoApiKeyAvailable;
 
@@ -157,7 +157,7 @@ class Project {
 	 * @since  0.0.0
 	 * @param  string $locale Code for the locale for the name of the file.
 	 * @return string         Path for the file.
-	 * @throws Exception
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	public function get_path( string $locale ) : string {
 		$path = $this->config['path'] ?? './';
@@ -206,7 +206,7 @@ class Project {
 	 * @since  0.0.0
 	 * @return string
 	 * @throws NoFilenameAvailableForPotFile
-	 * @throws Exception
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	public function get_pot_path() : string {
 		$path = "{$this->config['destination']}";
@@ -244,7 +244,7 @@ class Project {
 	 * @param  array  $arg_values
 	 * @param  string $locale
 	 * @return string
-	 * @throws Exception
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	private function parse_filename(
 		string $filename,
@@ -262,7 +262,7 @@ class Project {
 
 			if ( ! isset( $arg_values[ $string_arg ] ) ) {
 				// TODO: make into a more specific argument.
-				throw new Exception(
+				throw new FilenameArgumentNotAvailable(
 					sprintf( 'Value for argument {$%s} in filename is not available.', $string_arg ),
 				);
 			}

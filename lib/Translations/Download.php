@@ -33,7 +33,7 @@ class Download extends ServiceBase {
 	 * @since  0.0.0
 	 * @return array
 	 * @throws AuthorizationFailed
-	 * @throws Exception
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	public function download() : array {
 		$this->authenticate();
