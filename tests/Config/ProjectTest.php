@@ -375,7 +375,16 @@ class ProjectTest extends TestCase {
 				],
 				'pt_PT',
 				"{$path}pt_PT.{$ext}",
-			]
+			],
+			'Empty locale' => [
+				[
+					'path'   => $path,
+					'ext'    => $ext,
+					'domain' => $domain,
+				],
+				'',
+				"{$path}{$domain}.{$ext}",
+			],
 		];
 	}
 
