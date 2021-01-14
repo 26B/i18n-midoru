@@ -165,22 +165,25 @@ class Project {
 			return $path . "{$locale}.{$this->config['ext']}";
 		}
 
+		$filename_parts = [];
+
 		if ( isset( $this->config['filename'] ) ) {
-			$path .= "{$this->config['filename']}-";
+			$filename_parts[] = "{$this->config['filename']}";
 
 		} elseif ( isset( $this->config['domain'] ) ) {
-			$path .= "{$this->config['domain']}-";
+			$filename_parts[] = "{$this->config['domain']}";
 		}
 
 		if ( ! empty( $locale ) ) {
-			$path .= "{$locale}";
+			$filename_parts[] = "{$locale}";
 		}
 
 		// TODO: Should we only add this if the format/ext is also jed/json?
 		if ( isset( $this->config['js-handle'] ) ) {
-			$path .= "-{$this->config['js-handle']}";
+			$filename_parts[] = "{$this->config['js-handle']}";
 		}
 
+		$path .= implode( '-', $filename_parts );
 		return "{$path}.{$this->config['ext']}";
 	}
 
