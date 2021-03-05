@@ -19,6 +19,7 @@ class Download extends ServiceBase {
 	 * @var   array
 	 */
 	const ACCEPTED_EXPORT_KEYS = [
+		'__project_name', // The project from the config.
 		'locale',
 		'ext',
 		'format',
@@ -77,8 +78,9 @@ class Download extends ServiceBase {
 	 * @return array
 	 */
 	private function make_export_config( string $locale ) : array {
-		$config           = $this->config->get_config();
-		$config['locale'] = $locale;
+		$config                   = $this->config->get_config();
+		$config['locale']         = $locale;
+		$config['__project_name'] = $this->config->get_name();
 		return array_filter(
 			$config,
 			function ( $key ) {

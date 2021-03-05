@@ -4,6 +4,7 @@ namespace TwentySixB\Translations\Clients\Service;
 
 use Exception;
 use TwentySixB\Translations\Exceptions\AuthorizationFailed;
+use TwentySixB\Translations\LockHandler;
 
 /**
  * Client class for handling requests for Localise.
@@ -76,27 +77,29 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
+		$lock      = LockHandler::get_instance();
+		$proj_name = $args['__project_name'];
+
 		$url = sprintf(
 			'https://localise.biz/api/export/locale/%s.%s',
 			$args['locale'],
 			$args['ext']
 		);
-		unset( $args['locale'], $args['ext'] );
+		unset( $args['locale'], $args['ext'], $args['__project_name'] );
 
 		$url .= $this->get_query_string( $args );
 
 		$res = $this->client->request(
 			'GET',
 			$url,
-			[],
-			// TODO: incorporate If modified since
-			// 'headers' => [
-			// 	'If-Modified-Since' => $args[ 'Last-Modified' ],
-			// ]
+			[
+				'headers' => [
+					'If-Modified-Since' => $lock['localise'][ $proj_name ]['Last-Modified'] ?? '',
+				],
+			]
 		);
 
-		// TODO: do something with this.
-		// var_dump( $res->getHeaders()['Last-Modified'][0] );
+		$lock['localise'][ $proj_name ]['Last-Modified'] = $res->getHeaders()['Last-Modified'][0];
 
 		return $res->getBody()->__toString();
 	}
