@@ -87,7 +87,7 @@ class Translations {
 
 			// Maybe breakdown into get AND upload.
 			$pot_maker->make_pot();
-			print( "Translation files downloaded and saved successfully.\n" );
+			print( "Translation pot files made successfully.\n" );
 		}
 	}
 
