@@ -4,7 +4,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "loco/loco": "^2.0"
+        "guzzlehttp/guzzle": "^7.2"
     },
     "require-dev": {
       "phpunit/phpunit": "^9.0"

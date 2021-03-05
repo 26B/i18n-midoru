@@ -3,7 +3,6 @@
 namespace TwentySixB\Translations\Clients\Service;
 
 use Exception;
-use Loco\Http\ApiClient;
 use TwentySixB\Translations\Exceptions\AuthorizationFailed;
 
 /**
@@ -37,20 +36,31 @@ class Localise extends Client {
 		// Clean previous client.
 		$this->client = null;
 
-		// Make a new client.
-		$client = ApiClient::factory( $args );
+		$client = new \GuzzleHttp\Client(
+			[
+				'headers' => [
+					'Authorization' => 'Loco ' . $args['key'],
+				],
+			]
+		);
 
-		// Try to authenticate it.
-		try {
-			$result = $client->authVerify();
-			printf( "Authenticated as '%s'.\n", $result['user']['name'] );
-		} catch ( Exception $e ) {
+		$res = $client->request(
+			'GET',
+			'https://localise.biz/api/auth/verify',
+			[]
+		);
+
+		if ( $res->getStatusCode() !== 200 ) {
 			throw new AuthorizationFailed( 'Authorization was not successful.' );
 		}
 
+		$body = json_decode( $res->getBody()->__toString(), true );
+
+		printf( "Authenticated as '%s' in project '%s'.\n", $body['user']['name'], $body['project']['name'] );
+
 		// Save client and return result.
 		$this->client = $client;
-		return $result;
+		return $body;
 	}
 
 	/**
@@ -66,7 +76,29 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
-		return $this->client->exportLocale( $args );
+		$url = sprintf(
+			'https://localise.biz/api/export/locale/%s.%s',
+			$args['locale'],
+			$args['ext']
+		);
+		unset( $args['locale'], $args['ext'] );
+
+		$url .= $this->get_query_string( $args );
+
+		$res = $this->client->request(
+			'GET',
+			$url,
+			[],
+			// TODO: incorporate If modified since
+			// 'headers' => [
+			// 	'If-Modified-Since' => $args[ 'Last-Modified' ],
+			// ]
+		);
+
+		// TODO: do something with this.
+		// var_dump( $res->getHeaders()['Last-Modified'][0] );
+
+		return $res->getBody()->__toString();
 	}
 
 	/**
@@ -82,7 +114,15 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
-		return $this->client->import( $args );
+		$url  = sprintf( 'https://localise.biz/api/import/%s', $args['ext'] );
+		$body = $args['data'];
+		unset( $args['ext'], $args['data'] );
+
+		$url .= $this->get_query_string( $args );
+
+		$res = $this->client->request( 'POST', $url, [ 'body' => $body ] );
+
+		return json_decode( $res->getBody()->__toString(), true );
 	}
 
 	/**
@@ -93,5 +133,25 @@ class Localise extends Client {
 	 */
 	public function get_api_key_prefix() : string {
 		return 'LOCALISE_';
+	}
+
+	/**
+	 * Get the query string from the arguments.
+	 *
+	 * @since 0.0.0
+	 * @param array $args
+	 * @return string
+	 */
+	private function get_query_string( array $args ) : string {
+		$query_string = [];
+		foreach ( $args as $arg_name => $arg_value ) {
+			$query_string[] = "{$arg_name}={$arg_value}";
+		}
+
+		if ( empty( $query_string ) ) {
+			return '';
+		}
+
+		return '?' . implode( '&', $query_string );
 	}
 }
