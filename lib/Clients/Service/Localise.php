@@ -38,7 +38,8 @@ class Localise extends Client {
 
 		$client = new \GuzzleHttp\Client(
 			[
-				'headers' => [
+				'base_uri' => 'https://localise.biz/api/',
+				'headers'  => [
 					'Authorization' => 'Loco ' . $args['key'],
 				],
 			]
@@ -46,7 +47,7 @@ class Localise extends Client {
 
 		$res = $client->request(
 			'GET',
-			'https://localise.biz/api/auth/verify',
+			'auth/verify',
 			[]
 		);
 
@@ -76,11 +77,7 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
-		$url = sprintf(
-			'https://localise.biz/api/export/locale/%s.%s',
-			$args['locale'],
-			$args['ext']
-		);
+		$url = sprintf( 'export/locale/%s.%s', $args['locale'], $args['ext'] );
 		unset( $args['locale'], $args['ext'] );
 
 		$url .= $this->get_query_string( $args );
@@ -114,7 +111,7 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
-		$url  = sprintf( 'https://localise.biz/api/import/%s', $args['ext'] );
+		$url  = sprintf( 'import/%s', $args['ext'] );
 		$body = $args['data'];
 		unset( $args['ext'], $args['data'] );
 
