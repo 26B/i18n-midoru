@@ -92,11 +92,7 @@ class Localise extends Client {
 		$res = $this->client->request(
 			'GET',
 			$url,
-			[
-				'headers' => [
-					'If-Modified-Since' => $lock['localise'][ $proj_name ]['Last-Modified'] ?? '',
-				],
-			]
+			$this->get_export_options( $lock, $proj_name )
 		);
 
 		$lock['localise'][ $proj_name ]['Last-Modified'] = $res->getHeaders()['Last-Modified'][0];
@@ -156,5 +152,30 @@ class Localise extends Client {
 		}
 
 		return '?' . implode( '&', $query_string );
+	}
+
+	/**
+	 * Get options for export.
+	 *
+	 * Check env or constant value for not checking if export has been modified since.
+	 *
+	 * @since  0.0.0
+	 * @param  LockHandler $lock
+	 * @param  string      $proj_name
+	 * @return array
+	 */
+	private function get_export_options( LockHandler $lock, string $proj_name ) : array {
+		if (
+			getenv( 'DONT_CHECK_MODIFIED' ) === 'true'
+			|| ( defined( 'DONT_CHECK_MODIFIED' ) && constant( 'DONT_CHECK_MODIFIED' ) )
+		) {
+			return [];
+		}
+
+		return [
+			'headers' => [
+				'If-Modified-Since' => $lock['localise'][ $proj_name ]['Last-Modified'] ?? '',
+			],
+		];
 	}
 }
