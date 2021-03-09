@@ -63,7 +63,7 @@ class LockHandler extends ArrayObject {
 	 */
 	private function __construct() {
 		$this->path = getcwd() . '/' . self::FILENAME;
-		$file       = fopen( $this->path, 'r' );
+		$file       = @fopen( $this->path, 'r' );
 
 		$data = [];
 		if ( $file ) {
