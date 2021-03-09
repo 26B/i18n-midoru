@@ -39,7 +39,8 @@ class Localise extends Client {
 
 		$client = new \GuzzleHttp\Client(
 			[
-				'headers' => [
+				'base_uri' => 'https://localise.biz/api/',
+				'headers'  => [
 					'Authorization' => 'Loco ' . $args['key'],
 				],
 			]
@@ -47,7 +48,7 @@ class Localise extends Client {
 
 		$res = $client->request(
 			'GET',
-			'https://localise.biz/api/auth/verify',
+			'auth/verify',
 			[]
 		);
 
@@ -79,15 +80,11 @@ class Localise extends Client {
 
 		$lock      = LockHandler::get_instance();
 		$proj_name = $args['__project_name'];
-
-		$url = sprintf(
-			'https://localise.biz/api/export/locale/%s.%s',
-			$args['locale'],
-			$args['ext']
-		);
+    
+		$url = sprintf( 'export/locale/%s.%s', $args['locale'], $args['ext'] );
 		unset( $args['locale'], $args['ext'], $args['__project_name'] );
 
-		$url .= $this->get_query_string( $args );
+		$url .= empty( $args ) ? '' : '?' . http_build_query( $args );
 
 		$res = $this->client->request(
 			'GET',
@@ -113,11 +110,11 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
-		$url  = sprintf( 'https://localise.biz/api/import/%s', $args['ext'] );
+		$url  = sprintf( 'import/%s', $args['ext'] );
 		$body = $args['data'];
 		unset( $args['ext'], $args['data'] );
 
-		$url .= $this->get_query_string( $args );
+		$url .= empty( $args ) ? '' : '?' . http_build_query( $args );
 
 		$res = $this->client->request( 'POST', $url, [ 'body' => $body ] );
 
@@ -132,26 +129,6 @@ class Localise extends Client {
 	 */
 	public function get_api_key_prefix() : string {
 		return 'LOCALISE_';
-	}
-
-	/**
-	 * Get the query string from the arguments.
-	 *
-	 * @since 0.0.0
-	 * @param array $args
-	 * @return string
-	 */
-	private function get_query_string( array $args ) : string {
-		$query_string = [];
-		foreach ( $args as $arg_name => $arg_value ) {
-			$query_string[] = "{$arg_name}={$arg_value}";
-		}
-
-		if ( empty( $query_string ) ) {
-			return '';
-		}
-
-		return '?' . implode( '&', $query_string );
 	}
 
 	/**
