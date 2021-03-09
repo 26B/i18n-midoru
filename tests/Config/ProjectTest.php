@@ -16,6 +16,8 @@ use TwentySixB\Translations\Exceptions\NoApiKeyAvailable;
  * @package    TODO:
  * @subpackage TODO:
  * @author     TODO:
+ *
+ * @coversDefaultClass \TwentySixB\Translations\Config\Project
  */
 class ProjectTest extends TestCase {
 
@@ -25,6 +27,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getApiKeyData
+	 * @covers ::__construct
 	 * @covers ::get_api_key
 	 * @testdox get_api_key - returns what is expected
 	 *
@@ -59,6 +62,7 @@ class ProjectTest extends TestCase {
 	 * Test whether an expcetion is thrown when the project api key is not avaiable.
 	 *
 	 * @since 0.0.0
+	 * @covers ::__construct
 	 * @covers ::get_api_key
 	 * @testdox get_api_key - exception is thrown when key isn't available
 	 *
@@ -81,6 +85,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getLocalesData
+	 * @covers ::__construct
 	 * @covers ::get_locales
 	 * @testdox get_locales - returns what is expected
 	 *
@@ -97,6 +102,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_config
 	 * @testdox get_config - returns the entire config
 	 *
@@ -112,6 +118,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_name
 	 * @testdox get_name - returns the name in the config
 	 *
@@ -127,6 +134,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_domain
 	 * @testdox get_domain - returns the domain in the config
 	 *
@@ -142,6 +150,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_format
 	 * @testdox get_format - returns the format in the config
 	 *
@@ -156,6 +165,7 @@ class ProjectTest extends TestCase {
 	 * Test get_client returns the value for 'client' inside the config passed to the constructor.
 	 *
 	 * @since 0.0.0
+	 * @covers ::__construct
 	 * @covers ::get_client
 	 * @testdox get_client - returns the client in the config
 	 *
@@ -172,6 +182,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getSkipJsData
+	 * @covers ::__construct
 	 * @covers ::get_skip_js
 	 * @testdox get_skip_js - returns the skip-js in the config
 	 *
@@ -189,6 +200,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getWrapJedData
+	 * @covers ::__construct
 	 * @covers ::get_wrap_jed
 	 * @testdox get_wrap_jed - returns the wrap-jed in the config
 	 *
@@ -205,6 +217,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getPathData
+	 * @covers ::__construct
 	 * @covers ::get_path
 	 * @testdox get_path - returns what is expected
 	 *
@@ -222,6 +235,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_source_path
 	 * @testdox get_source_path - returns the source_path value in the config
 	 *
@@ -240,6 +254,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getPotPathData
+	 * @covers ::__construct
 	 * @covers ::get_pot_path
 	 * @testdox get_pot_path - returns what is expected
 	 *
@@ -253,6 +268,7 @@ class ProjectTest extends TestCase {
 	 * Test exception is thrown when filename or domain is not set in config.
 	 *
 	 * @since 0.0.0
+	 * @covers ::__construct
 	 * @covers ::get_pot_path
 	 * @testdox get_pot_path - no filename/domain available
 	 *

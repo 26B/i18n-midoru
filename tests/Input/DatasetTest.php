@@ -13,6 +13,8 @@ use TwentySixB\Translations\Input\Dataset;
  * @package    TODO:
  * @subpackage TODO:
  * @author     TODO:
+ *
+ * @coversDefaultClass \TwentySixB\Translations\Input\Dataset
  */
 class DatasetTest extends TestCase {
 
