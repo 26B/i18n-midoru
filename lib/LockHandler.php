@@ -28,7 +28,7 @@ class LockHandler extends ArrayObject {
 	 * @since 0.0.0
 	 * @var   string
 	 */
-	const FILENAME = 'midoru.lock';
+	const FILENAME = 'i18n-midoru.lock';
 
 	/**
 	 * File path to lock.
