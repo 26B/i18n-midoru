@@ -46,6 +46,8 @@ class Translations {
 			$downloader->save( $downloads );
 			print( "Translation files downloaded and saved successfully.\n" );
 		}
+
+		LockHandler::get_instance()->write();
 	}
 
 	/**

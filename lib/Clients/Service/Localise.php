@@ -4,6 +4,7 @@ namespace TwentySixB\Translations\Clients\Service;
 
 use Exception;
 use TwentySixB\Translations\Exceptions\AuthorizationFailed;
+use TwentySixB\Translations\LockHandler;
 
 /**
  * Client class for handling requests for Localise.
@@ -77,23 +78,21 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
+		$lock      = LockHandler::get_instance();
+		$proj_name = $args['__project_name'];
+    
 		$url = sprintf( 'export/locale/%s.%s', $args['locale'], $args['ext'] );
-		unset( $args['locale'], $args['ext'] );
+		unset( $args['locale'], $args['ext'], $args['__project_name'] );
 
 		$url .= empty( $args ) ? '' : '?' . http_build_query( $args );
 
 		$res = $this->client->request(
 			'GET',
 			$url,
-			[],
-			// TODO: incorporate If modified since
-			// 'headers' => [
-			// 	'If-Modified-Since' => $args[ 'Last-Modified' ],
-			// ]
+			$this->get_export_options( $lock, $proj_name )
 		);
 
-		// TODO: do something with this.
-		// var_dump( $res->getHeaders()['Last-Modified'][0] );
+		$lock['localise'][ $proj_name ]['Last-Modified'] = $res->getHeaders()['Last-Modified'][0];
 
 		return $res->getBody()->__toString();
 	}
@@ -130,5 +129,30 @@ class Localise extends Client {
 	 */
 	public function get_api_key_prefix() : string {
 		return 'LOCALISE_';
+	}
+
+	/**
+	 * Get options for export.
+	 *
+	 * Check env or constant value for not checking if export has been modified since.
+	 *
+	 * @since  0.0.0
+	 * @param  LockHandler $lock
+	 * @param  string      $proj_name
+	 * @return array
+	 */
+	private function get_export_options( LockHandler $lock, string $proj_name ) : array {
+		if (
+			getenv( 'DONT_CHECK_MODIFIED' ) === 'true'
+			|| ( defined( 'DONT_CHECK_MODIFIED' ) && constant( 'DONT_CHECK_MODIFIED' ) )
+		) {
+			return [];
+		}
+
+		return [
+			'headers' => [
+				'If-Modified-Since' => $lock['localise'][ $proj_name ]['Last-Modified'] ?? '',
+			],
+		];
 	}
 }
