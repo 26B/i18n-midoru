@@ -7,6 +7,7 @@ use TwentySixB\Translations\Clients\Client;
 use TwentySixB\Translations\Clients\Generator\Client as GeneratorClient;
 use TwentySixB\Translations\Clients\Service\Client as ServiceClient;
 use TwentySixB\Translations\Exceptions\ConfigFileNotFound;
+use TwentySixB\Translations\LockHandler;
 
 /**
  * Class for dealing with the config files.
@@ -36,7 +37,7 @@ class Config {
 			throw new ConfigFileNotFound( "Config file in {$path} not found." );
 		}
 		$this->config = json_decode( file_get_contents( $path ), true, 512, JSON_THROW_ON_ERROR );
-		//TODO: validate lock here.
+		LockHandler::get_instance()->validate( $this->config );
 	}
 
 	/**

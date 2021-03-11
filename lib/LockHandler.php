@@ -30,6 +30,12 @@ class LockHandler {
 	 */
 	const FILENAME = 'i18n-midoru.lock';
 
+	/**
+	 * Lock data.
+	 *
+	 * @since 0.0.0
+	 * @var array
+	 */
 	private $data = [];
 
 	/**
@@ -40,6 +46,12 @@ class LockHandler {
 	 */
 	private $path = '';
 
+	/**
+	 * If data has been changed since the last writing.
+	 *
+	 * @since 0.0.0
+	 * @var boolean
+	 */
 	private $is_dirty = false;
 
 	/**
@@ -67,14 +79,32 @@ class LockHandler {
 		}
 	}
 
-	public function set( string $project, string $property, $value ) {
+	/**
+	 * Set property value for a project.
+	 *
+	 * @since 0.0.0
+	 * @param string $project
+	 * @param string $property
+	 * @param mixed  $value
+	 * @return void
+	 */
+	public function set( string $project, string $property, $value ) : void {
 		if ( $property === 'md5' ) {
 			throw new \Exception( 'Property md5 is protected for the lock file.' );
 		}
-		$this->is_dirty = true;
+		$this->is_dirty                      = true;
 		$this->data[ $project ][ $property ] = $value;
 	}
 
+	/**
+	 * Get the property value for a project.
+	 *
+	 * @since 0.0.0
+	 * @param string $project
+	 * @param string $property
+	 * @param mixed  $default
+	 * @return mixed
+	 */
 	public function get( string $project, string $property, $default = '' ) {
 		return $this->data[ $project ][ $property ] ?? $default;
 	}
@@ -101,5 +131,29 @@ class LockHandler {
 		fclose( $file );
 
 		$this->is_dirty = false;
+	}
+
+	/**
+	 * Validate if project configs changed with md5.
+	 *
+	 * If a project config changed, then its data will be emptied except for its new md5.
+	 *
+	 * @since  0.0.0
+	 * @param  array $config
+	 * @return void
+	 */
+	public function validate( array $config ) : void {
+		foreach ( $config as $project => $proj_config ) {
+			$md5     = md5( json_encode( $proj_config ) );
+			$old_md5 = '';
+			if ( isset( $this->data[ $project ]['md5'] ) ) {
+				$old_md5 = $this->data[ $project ]['md5'];
+			}
+
+			if ( $md5 !== $old_md5 ) {
+				unset( $this->data[ $project ] );
+			}
+			$this->data[ $project ]['md5'] = $md5;
+		}
 	}
 }
