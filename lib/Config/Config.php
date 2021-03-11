@@ -28,7 +28,7 @@ class Config {
 
 	/**
 	 * @since 0.0.0
-	 * TODO: be able to get other path.
+	 * TODO: be able to read from custom path.
 	 */
 	public function __construct() {
 		$path = getcwd() . '/i18n-midoru.json';
