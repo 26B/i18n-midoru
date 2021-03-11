@@ -78,21 +78,17 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
-		$lock      = LockHandler::get_instance();
-		$proj_name = $args['__project_name'];
-    
+		$proj_name     = $args['__project_name'];
+		$last_modified = $args['__last_modified'];
+
 		$url = sprintf( 'export/locale/%s.%s', $args['locale'], $args['ext'] );
-		unset( $args['locale'], $args['ext'], $args['__project_name'] );
+		unset( $args['locale'], $args['ext'], $args['__project_name'], $args['__last_modified'] );
 
 		$url .= empty( $args ) ? '' : '?' . http_build_query( $args );
 
-		$res = $this->client->request(
-			'GET',
-			$url,
-			$this->get_export_options( $lock, $proj_name )
-		);
+		$res = $this->client->request( 'GET', $url, $this->get_export_options( $last_modified ) );
 
-		$lock['localise'][ $proj_name ]['Last-Modified'] = $res->getHeaders()['Last-Modified'][0];
+		LockHandler::get_instance()[ $proj_name ]['Last-Modified'] = $res->getHeaders()['Last-Modified'][0];
 
 		return $res->getBody()->__toString();
 	}
@@ -137,11 +133,10 @@ class Localise extends Client {
 	 * Check env or constant value for not checking if export has been modified since.
 	 *
 	 * @since  0.0.0
-	 * @param  LockHandler $lock
-	 * @param  string      $proj_name
+	 * @param  string $last_modified
 	 * @return array
 	 */
-	private function get_export_options( LockHandler $lock, string $proj_name ) : array {
+	private function get_export_options( string $last_modified ) : array {
 		if (
 			getenv( 'DONT_CHECK_MODIFIED' ) === 'true'
 			|| ( defined( 'DONT_CHECK_MODIFIED' ) && constant( 'DONT_CHECK_MODIFIED' ) )
@@ -151,7 +146,7 @@ class Localise extends Client {
 
 		return [
 			'headers' => [
-				'If-Modified-Since' => $lock['localise'][ $proj_name ]['Last-Modified'] ?? '',
+				'If-Modified-Since' => $last_modified,
 			],
 		];
 	}
