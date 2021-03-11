@@ -12,7 +12,7 @@ use ArrayObject;
  * @subpackage TODO:
  * @author     TODO:
  */
-class LockHandler extends ArrayObject {
+class LockHandler {
 
 	/**
 	 * Singleton instance.
@@ -30,6 +30,8 @@ class LockHandler extends ArrayObject {
 	 */
 	const FILENAME = 'i18n-midoru.lock';
 
+	private $data = [];
+
 	/**
 	 * File path to lock.
 	 *
@@ -38,13 +40,7 @@ class LockHandler extends ArrayObject {
 	 */
 	private $path = '';
 
-	/**
-	 * MD5 of the data read on the first instance. Used for dirty state handling.
-	 *
-	 * @since 0.0.0
-	 * @var   string
-	 */
-	private $md5 = '';
+	private $is_dirty = false;
 
 	/**
 	 * Get the singleton instance or create one if it doesn't exist.
@@ -65,16 +61,22 @@ class LockHandler extends ArrayObject {
 		$this->path = getcwd() . '/' . self::FILENAME;
 		$file       = @fopen( $this->path, 'r' );
 
-		$data = [];
 		if ( $file ) {
-			$data = json_decode( fread( $file, filesize( $this->path ) ), true );
+			$this->data = json_decode( fread( $file, filesize( $this->path ) ), true );
 			fclose( $file );
 		}
+	}
 
-		// We use md5 to verify dirty state due to weird behavior of ArrayObject with indirect modification.
-		$this->md5 = md5( json_encode( $data ) );
+	public function set( string $project, string $property, $value ) {
+		if ( $property === 'md5' ) {
+			throw new \Exception( 'Property md5 is protected for the lock file.' );
+		}
+		$this->is_dirty = true;
+		$this->data[ $project ][ $property ] = $value;
+	}
 
-		parent::__construct( $data );
+	public function get( string $project, string $property, $default = '' ) {
+		return $this->data[ $project ][ $property ] ?? $default;
 	}
 
 	/**
@@ -85,11 +87,7 @@ class LockHandler extends ArrayObject {
 	 * @throws Exception When file open fails.
 	 */
 	public function write() : void {
-		$data = $this->getArrayCopy();
-
-		// Avoid unnecessary writes.
-		$new_md5 = md5( json_encode( $data ) );
-		if ( $new_md5 === $this->md5 ) {
+		if ( ! $this->is_dirty ) {
 			return;
 		}
 
@@ -98,10 +96,10 @@ class LockHandler extends ArrayObject {
 			throw new \Exception( 'Failure to open lock file for writing.' );
 		}
 
-		$this->md5 = $new_md5;
-
 		// TODO: Should we save the file its empty?
-		fwrite( $file, empty( $data ) ? '{}' : json_encode( $data, JSON_PRETTY_PRINT ) );
+		fwrite( $file, empty( $this->data ) ? '{}' : json_encode( $this->data, JSON_PRETTY_PRINT ) );
 		fclose( $file );
+
+		$this->is_dirty = false;
 	}
 }

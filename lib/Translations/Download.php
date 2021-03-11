@@ -44,7 +44,7 @@ class Download extends ServiceBase {
 		$downloads = [];
 
 		$lock          = LockHandler::get_instance();
-		$last_modified = $lock[ $this->config->get_name() ]['Last-Modified'] ?? '';
+		$last_modified = $lock->get( $this->config->get_name(), 'Last-Modified', '' );
 
 		foreach ( $this->config->get_locales() as $locale ) {
 			$export = $this->config->get_client()->export( $this->make_export_config( $locale, $last_modified ) );

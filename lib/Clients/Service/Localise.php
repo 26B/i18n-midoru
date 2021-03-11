@@ -88,7 +88,7 @@ class Localise extends Client {
 
 		$res = $this->client->request( 'GET', $url, $this->get_export_options( $last_modified ) );
 
-		LockHandler::get_instance()[ $proj_name ]['Last-Modified'] = $res->getHeaders()['Last-Modified'][0];
+		LockHandler::get_instance()->set( $proj_name, 'Last-Modified', $res->getHeaders()['Last-Modified'][0] );
 
 		return $res->getBody()->__toString();
 	}
