@@ -24,6 +24,13 @@ use TwentySixB\Translations\Input\Input;
  */
 class ConfigTest extends TestCase {
 
+	public function tearDown() : void {
+		$json = getcwd() . '/i18n-midoru.json';
+		if ( file_exists( $json ) ) {
+			unlink( $json );
+		}
+	}
+
 	/**
 	 * Test get returns what is expected.
 	 *
@@ -34,13 +41,14 @@ class ConfigTest extends TestCase {
 	 * @covers ::get_config
 	 * @testdox get - returns what is expected
 	 *
-	 * @param  array  $expected   Expected return of get.
-	 * @param  string $purpose    Name of the purpose.
-	 * @param  Input  $inputs,... The various optional inputs for the config.
+	 * @param  array  $expected  Expected return of get.
+	 * @param  string $purpose   Name of the purpose.
+	 * @param  string $json_name Name of the dummy json.
 	 * @return void
 	 */
-	public function testGet( array $expected, string $purpose, Input ...$inputs ) : void {
-		$config = new Config( ...$inputs );
+	public function testGet( array $expected, string $purpose, string $json_name ) : void {
+		$this->use_this_json( $json_name );
+		$config = new Config();
 		$output = $config->get( $purpose );
 		$this->assertCount( count( $expected ), $output );
 		foreach ( $output as $idx => $config ) {
@@ -59,21 +67,15 @@ class ConfigTest extends TestCase {
 	 * @return void
 	 */
 	public function testGetClientDoesntExist() : void {
-		$data = new Dataset( [
-			'project-name' => [
-				'export' => [
-					"client" => 'some_client_that_doesnt_exist',
-				]
-			]
-		] );
+		$this->use_this_json( 'client-doesnt-exist.json' );
 		try {
-			( new Config( $data ) )->get( 'export' );
+			( new Config() )->get( 'export' );
 		} catch ( Exception $e ) {
 			$this->assertStringContainsString(
-				$data->get()['project-name']['export']['client'],
+				'client_doesnt_exist',
 				$e->getMessage()
 			);
-			$this->assertStringContainsString( 'project-name', $e->getMessage() );
+			$this->assertStringContainsString( 'test_project', $e->getMessage() );
 			return;
 		}
 		$this->fail( 'Exception was not thrown.' );
@@ -90,12 +92,58 @@ class ConfigTest extends TestCase {
 	 * @return void
 	 */
 	public function testGetClientKeyDoesntExist() : void {
-		$data = new Dataset( [ 'project-name' => [ 'export' => [ ] ] ] );
+		$this->use_this_json( 'no-client-value.json' );
 		try {
-			( new Config( $data ) )->get( 'export' );
+			( new Config() )->get( 'export' );
 		} catch ( Exception $e ) {
 			$this->assertStringContainsString( 'client', $e->getMessage() );
-			$this->assertStringContainsString( 'project-name', $e->getMessage() );
+			$this->assertStringContainsString( 'test_project', $e->getMessage() );
+			return;
+		}
+		$this->fail( 'Exception was not thrown.' );
+	}
+
+	/**
+	 * Test get when the config doesn't exist.
+	 *
+	 * @since  0.0.0
+	 * @covers ::__construct
+	 * @covers ::get
+	 * @testdox get - json file doesn't exist
+	 *
+	 * @return void
+	 */
+	public function testJsonDoesntExist() : void {
+		$json = getcwd() . '/i18n-midoru.json';
+		if ( file_exists( $json ) ) {
+			unlink( $json );
+		}
+
+		try {
+			( new Config() )->get( 'export' );
+		} catch ( Exception $e ) {
+			$this->assertStringContainsString( $json, $e->getMessage() );
+			return;
+		}
+		$this->fail( 'Exception was not thrown.' );
+	}
+
+	/**
+	 * Test get when the config doesn't exist.
+	 *
+	 * @since  0.0.0
+	 * @covers ::__construct
+	 * @covers ::get
+	 * @testdox get - json file doesn't exist
+	 *
+	 * @return void
+	 */
+	public function testNotJson() : void {
+		$this->use_this_json( 'not-json.json' );
+		try {
+			( new Config() )->get( 'export' );
+		} catch ( Exception $e ) {
+			$this->assertStringContainsString( 'Syntax error', $e->getMessage() );
 			return;
 		}
 		$this->fail( 'Exception was not thrown.' );
@@ -110,86 +158,37 @@ class ConfigTest extends TestCase {
 	 * @return array
 	 */
 	public function getData() : array {
-		$basedir = \dirname( __DIR__ );
-		$export_config = [
-			"locale" => [ "fr" ],
-			"domain" => "export_domain",
-			"path"   => "export_path/",
-			"ext"    => "po",
-			"format" => "gettext",
-			// Test client via path.
-			"client" => Localise::class
+		$localise_data = [
+			'locale' => [ 'pt_PT', 'fr' ],
+			'domain' => 'test_domain',
+			'path'   => 'test_output_path/',
+			'ext'    => 'po',
+			'format' => 'gettext',
+			'client' => new Localise(),
+			'key'    => 'test_key',
+			'name'   => 'test_project',
 		];
-
-		// Test client via name.
-		$other_export_config = $export_config;
-		$other_export_config['client'] = 'localise';
-
-		// File
-		$file                                    = new File( "{$basedir}/../tests/DummyFiles/config.json" );
-		$empty_file                              = new File( "{$basedir}/../tests/DummyFiles/empty-config.json" );
-		$expected_file                           = $file->get();
-		$key                                     = $expected_file['test_project']['key'];
-		$expected_file['test_project']           = $expected_file['test_project']['export'];
-		$expected_file['test_project']['name']   = 'test_project';
-		$expected_file['test_project']['key']    = $key;
-		$expected_file['test_project']['client'] = new Localise();
-
-		// Dataset
-		$dataset    = new Dataset( [
-			'dataset_project' => [
-				'export' => $export_config,
-			],
-			'test_project' => [
-				'export' => $other_export_config,
-			]
-		] );
-
-		$empty_dataset = new Dataset( [] );
-		$expected_dataset = $dataset->get();
-		$expected_dataset['dataset_project'] = $expected_dataset['dataset_project']['export'];
-		$expected_dataset['dataset_project']['name'] = 'dataset_project';
-		$expected_dataset['dataset_project']['client'] = new $expected_dataset['dataset_project']['client']();
-		$expected_dataset['test_project'] = $expected_dataset['test_project']['export'];
-		$expected_dataset['test_project']['name'] = 'test_project';
-		$expected_dataset['test_project']['client'] = new Localise();
-
-		$export_config['client'] = WP_I18n::class;
-		$other_dataset = new Dataset ( [
-			'generator_client' => [
-				'make_pots' => $export_config,
-			]
-		] );
-		$expected_other_dataset = $other_dataset->get();
-		$expected_other_dataset['generator_client'] = $expected_other_dataset['generator_client']['make_pots'];
-		$expected_other_dataset['generator_client']['name'] = 'generator_client';
-		$expected_other_dataset['generator_client']['client'] = new $expected_other_dataset['generator_client']['client']();
-
-		// TODO: test for generator clients.
+		$wp_i18n_data = [
+			'client'      => new WP_I18n(),
+			'domain'      => 'plugin-content',
+			'destination' => './lib/languages/',
+			'source'      => './lib/',
+			'skip-js'     => true,
+			'key'         => 'test_key',
+			'name'        => 'test_project',
+		];
 		return [
-			'No input'               => [ [], 'export' ],
-			'Empty dataset'          => [ [], 'export', $empty_dataset ],
-			'Empty file'             => [ [], 'export', $empty_file ],
-			'Empty file and dataset' => [ [], 'export', $empty_file, $empty_dataset ],
-			'Dataset'                => [ array_values( $expected_dataset ), 'export', $dataset ],
-			'File'                   => [ array_values( $expected_file ), 'export', $file ],
-			'Dataset and File, File\'s configs take precedence'       => [
-				array_values( array_merge( $expected_dataset, $expected_file ) ),
-				'export',
-				$dataset,
-				$file
-			],
-			'File and Dataset, Dataset\'s configs take precedence'       => [
-				array_values( array_merge( $expected_file, $expected_dataset ) ),
-				'export',
-				$file,
-				$dataset
-			],
-			'Generator Client' => [
-				array_values( $expected_other_dataset ),
-				'make_pots',
-				$other_dataset
-			],
+			'No input'                         => [ [], 'export', 'empty-config.json' ],
+			'Project without specific purpose' => [ [], 'import', 'config.json' ],
+			'Project export localise'          => [ [ $localise_data ], 'export', 'config.json' ],
+			'Project make_pots wp_i18n'        => [ [ $wp_i18n_data ], 'make_pots', 'config.json' ],
 		];
+	}
+
+	private function use_this_json( $name ) {
+		$base_dir = getcwd();
+		if ( ! copy( "{$base_dir}/tests/DummyFiles/{$name}", "{$base_dir}/i18n-midoru.json") ) {
+			$this->fail( "Failed to copy json from {$name}." );
+		}
 	}
 }

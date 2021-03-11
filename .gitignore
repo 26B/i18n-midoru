@@ -1,5 +1,7 @@
 vendor/
 .phpunit.result.cache
+i18n-midoru.json
+i18n-midoru.lock
 wp-cli.phar
 .DS_Store
 .vscode/
