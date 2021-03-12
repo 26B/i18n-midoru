@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+$argv = $_SERVER['argv'];
+
+if ( count( $argv ) === 1 ) {
+  print( 'Available commands: help, download, upload, make_pots' );
+  return;
+}
+
+if ( $argv[1] === 'help' ) {
+    //TODO:
+    return;
+}
+
+$t = new \TwentySixB\Translations\Translations();
+
+switch ( $argv[1] ) {
+    case 'download':
+        $t->download();
+        break;
+    case 'upload':
+        $t->upload();
+        break;
+    case 'make_pots':
+        $t->make_pots();
+        break;
+    default:
+        print( "Unknown command {$argv[1]}" );
+}

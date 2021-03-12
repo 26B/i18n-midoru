@@ -20,6 +20,9 @@
             "email": "hello@26b.io"
         }
     ],
+    "bin": [
+      "i18n-midoru"
+    ],
     "scripts": {
       "test": [
         "phpunit --testdox --colors=always"
