@@ -12,7 +12,7 @@ use ArrayObject;
  * @subpackage TODO:
  * @author     TODO:
  */
-class LockHandler extends ArrayObject {
+class LockHandler {
 
 	/**
 	 * Singleton instance.
@@ -31,6 +31,14 @@ class LockHandler extends ArrayObject {
 	const FILENAME = 'i18n-midoru.lock';
 
 	/**
+	 * Lock data.
+	 *
+	 * @since 0.0.0
+	 * @var array
+	 */
+	private $data = [];
+
+	/**
 	 * File path to lock.
 	 *
 	 * @since 0.0.0
@@ -39,12 +47,12 @@ class LockHandler extends ArrayObject {
 	private $path = '';
 
 	/**
-	 * MD5 of the data read on the first instance. Used for dirty state handling.
+	 * If data has been changed since the last writing.
 	 *
 	 * @since 0.0.0
-	 * @var   string
+	 * @var boolean
 	 */
-	private $md5 = '';
+	private $is_dirty = false;
 
 	/**
 	 * Get the singleton instance or create one if it doesn't exist.
@@ -65,16 +73,40 @@ class LockHandler extends ArrayObject {
 		$this->path = getcwd() . '/' . self::FILENAME;
 		$file       = @fopen( $this->path, 'r' );
 
-		$data = [];
 		if ( $file ) {
-			$data = json_decode( fread( $file, filesize( $this->path ) ), true );
+			$this->data = json_decode( fread( $file, filesize( $this->path ) ), true );
 			fclose( $file );
 		}
+	}
 
-		// We use md5 to verify dirty state due to weird behavior of ArrayObject with indirect modification.
-		$this->md5 = md5( json_encode( $data ) );
+	/**
+	 * Set property value for a project.
+	 *
+	 * @since 0.0.0
+	 * @param string $project
+	 * @param string $property
+	 * @param mixed  $value
+	 * @return void
+	 */
+	public function set( string $project, string $property, $value ) : void {
+		if ( $property === 'md5' ) {
+			throw new \Exception( 'Property md5 is protected for the lock file.' );
+		}
+		$this->is_dirty                      = true;
+		$this->data[ $project ][ $property ] = $value;
+	}
 
-		parent::__construct( $data );
+	/**
+	 * Get the property value for a project.
+	 *
+	 * @since 0.0.0
+	 * @param string $project
+	 * @param string $property
+	 * @param mixed  $default
+	 * @return mixed
+	 */
+	public function get( string $project, string $property, $default = '' ) {
+		return $this->data[ $project ][ $property ] ?? $default;
 	}
 
 	/**
@@ -85,11 +117,7 @@ class LockHandler extends ArrayObject {
 	 * @throws Exception When file open fails.
 	 */
 	public function write() : void {
-		$data = $this->getArrayCopy();
-
-		// Avoid unnecessary writes.
-		$new_md5 = md5( json_encode( $data ) );
-		if ( $new_md5 === $this->md5 ) {
+		if ( ! $this->is_dirty ) {
 			return;
 		}
 
@@ -98,10 +126,34 @@ class LockHandler extends ArrayObject {
 			throw new \Exception( 'Failure to open lock file for writing.' );
 		}
 
-		$this->md5 = $new_md5;
-
 		// TODO: Should we save the file its empty?
-		fwrite( $file, empty( $data ) ? '{}' : json_encode( $data, JSON_PRETTY_PRINT ) );
+		fwrite( $file, empty( $this->data ) ? '{}' : json_encode( $this->data, JSON_PRETTY_PRINT ) );
 		fclose( $file );
+
+		$this->is_dirty = false;
+	}
+
+	/**
+	 * Validate if project configs changed with md5.
+	 *
+	 * If a project config changed, then its data will be emptied except for its new md5.
+	 *
+	 * @since  0.0.0
+	 * @param  array $config
+	 * @return void
+	 */
+	public function validate( array $config ) : void {
+		foreach ( $config as $project => $proj_config ) {
+			$md5     = md5( json_encode( $proj_config ) );
+			$old_md5 = '';
+			if ( isset( $this->data[ $project ]['md5'] ) ) {
+				$old_md5 = $this->data[ $project ]['md5'];
+			}
+
+			if ( $md5 !== $old_md5 ) {
+				unset( $this->data[ $project ] );
+			}
+			$this->data[ $project ]['md5'] = $md5;
+		}
 	}
 }
