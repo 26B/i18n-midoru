@@ -4,7 +4,6 @@ namespace TwentySixB\Translations;
 
 use Exception;
 use TwentySixB\Translations\Config\Config;
-use TwentySixB\Translations\Input\Input;
 use TwentySixB\Translations\Translations\Download;
 use TwentySixB\Translations\Translations\PotMaker;
 use TwentySixB\Translations\Translations\Upload;
@@ -16,10 +15,9 @@ class Translations {
 
 	/**
 	 * @since 0.0.0
-	 * @param Input  $inputs,... Inputs sources for the Config.
 	 */
-	public function __construct( Input ...$inputs ) {
-		$this->config = new Config( ...$inputs );
+	public function __construct() {
+		$this->config = new Config();
 		printf( "Config loaded successfully.\n" );
 	}
 

@@ -7,14 +7,7 @@
       "path"  : "test_output_path/",
       "ext"   : "po",
       "format": "gettext",
-      "client": "localise"
-    },
-    "make_pots": {
-      "client"     : "WP_I18n",
-      "domain"     : "plugin-content",
-      "destination": "./lib/languages/",
-      "source"     : "./lib/",
-      "skip-js"    : true
+      "client": "client_doesnt_exist"
     }
   }
 }

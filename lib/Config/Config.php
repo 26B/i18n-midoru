@@ -6,10 +6,7 @@ use Exception;
 use TwentySixB\Translations\Clients\Client;
 use TwentySixB\Translations\Clients\Generator\Client as GeneratorClient;
 use TwentySixB\Translations\Clients\Service\Client as ServiceClient;
-use TwentySixB\Translations\Input\CLI;
-use TwentySixB\Translations\Input\Dataset;
-use TwentySixB\Translations\Input\File;
-use TwentySixB\Translations\Input\Input;
+use TwentySixB\Translations\Exceptions\ConfigFileNotFound;
 
 /**
  * Class for dealing with the config files.
@@ -22,14 +19,6 @@ use TwentySixB\Translations\Input\Input;
 class Config {
 
 	/**
-	 * Default Client for the configs.
-	 *
-	 * @since 0.0.0
-	 * @var   array
-	 */
-	private $inputs;
-
-	/**
 	 * Array of the loaded config.
 	 *
 	 * @since 0.0.0
@@ -39,10 +28,15 @@ class Config {
 
 	/**
 	 * @since 0.0.0
-	 * @param Input $inputs,... Inputs sources for the Config.
+	 * TODO: be able to read from custom path.
 	 */
-	public function __construct( Input ...$inputs ) {
-		$this->inputs = $inputs;
+	public function __construct() {
+		$path = getcwd() . '/i18n-midoru.json';
+		if ( ! file_exists( $path ) ) {
+			throw new ConfigFileNotFound( "Config file in {$path} not found." );
+		}
+		$this->config = json_decode( file_get_contents( $path ), true, 512, JSON_THROW_ON_ERROR );
+		//TODO: validate lock here.
 	}
 
 	/**
@@ -53,40 +47,16 @@ class Config {
 	 * @return array           Array of Projects.
 	 */
 	public function get( string $purpose ) : array {
-		$this->merge_inputs( $purpose );
-
 		$project_configs = [];
-		foreach ( $this->config as $config ) {
-			$project_configs[] = new Project( $config );
+		foreach ( $this->config as $project_name => $config ) {
+			if ( ! isset( $config[ $purpose ] ) ) {
+				continue;
+			}
+			$project_configs[] = new Project(
+				$this->prepare_config( $project_name, $config, $purpose )
+			);
 		}
 		return $project_configs;
-	}
-
-	/**
-	 * Merge the data in all the received inputs for a specific purpose.
-	 *
-	 * @since  0.0.0
-	 * @param  string $purpose Name of the purpose.
-	 * @return void
-	 */
-	private function merge_inputs( string $purpose ) : void {
-		$config = [];
-		foreach ( $this->inputs as $input ) {
-			//TODO: verify what happens when multiple projects are supplied to CLI
-			$values = $input->get();
-			if ( $input instanceof File || $input instanceof Dataset ) {
-				$values = $this->filter_and_clean_array_configs( $values, $purpose );
-
-			} elseif ( $input instanceof CLI ) {
-				foreach ( $values as $name => $proj_config ) {
-					$values[ $name ]['client'] = $this->get_client( $name, $proj_config );
-				}
-			}
-			//TODO: have a more generic way to deal with other inputs.
-
-			$config = array_merge( $config, $values );
-		}
-		$this->config = $config;
 	}
 
 	/**
@@ -109,6 +79,7 @@ class Config {
 	 * @throws Exception
 	 */
 	private function get_client( string $name, array $config ) : Client {
+		//TODO: we no longer need to handle classes (i.e. Localise::class), since its all by json.
 		if ( isset( $config['client'] ) ) {
 			if ( class_exists( $config['client'] ) ) {
 				return new $config['client']();
@@ -134,36 +105,13 @@ class Config {
 		throw new Exception( "Config for project '{$name}' does not have a value for 'client'." );
 	}
 
-	/**
-	 * Filter, clean and return array of project configs for a specific purpose.
-	 *
-	 * @since  0.0.0
-	 * @param  array  $configs Array of arrays (project configs).
-	 * @param  string $purpose Name of the purpose.
-	 * @return array  Filtered and cleaned configs.
-	 */
-	private function filter_and_clean_array_configs( array $configs, string $purpose ) : array {
-		// Filter configs by purpose
-		$configs = array_filter(
-			$configs,
-			function ( $proj_config ) use ( $purpose ) {
-				return isset( $proj_config[ $purpose ] );
-			}
-		);
-
-		// Get only purpose specific configs
-		array_walk(
-			$configs,
-			function ( &$proj_config, $name ) use ( $purpose ) {
-				$config = $proj_config[ $purpose ];
-				if ( isset( $proj_config['key'] ) ) {
-					$config['key'] = $proj_config['key'];
-				}
-				$config['name']   = $name;
-				$config['client'] = $this->get_client( $name, $config );
-				$proj_config      = $config;
-			},
-		);
-		return $configs;
+	private function prepare_config( $name, $proj_config, $purpose ) : array {
+		$config = $proj_config[ $purpose ];
+		if ( isset( $proj_config['key'] ) ) {
+			$config['key'] = $proj_config['key'];
+		}
+		$config['name']   = $name;
+		$config['client'] = $this->get_client( $name, $config );
+		return $config;
 	}
 }
