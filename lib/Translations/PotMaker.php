@@ -40,6 +40,7 @@ class PotMaker {
 	 * @since 0.0.0
 	 * @return void
 	 * @throws DirectoryDoesntExist
+	 * @throws FilenameArgumentNotAvailable
 	 * @throws Exception
 	 */
 	public function make_pot() : void {

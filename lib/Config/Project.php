@@ -2,8 +2,8 @@
 
 namespace TwentySixB\Translations\Config;
 
-use Exception;
 use TwentySixB\Translations\Clients\Client;
+use TwentySixB\Translations\Exceptions\FilenameArgumentNotAvailable;
 use TwentySixB\Translations\Exceptions\NoFilenameAvailableForPotFile;
 use TwentySixB\Translations\Exceptions\NoApiKeyAvailable;
 
@@ -157,20 +157,23 @@ class Project {
 	 * @since  0.0.0
 	 * @param  string $locale Code for the locale for the name of the file.
 	 * @return string         Path for the file.
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	public function get_path( string $locale ) : string {
 		$path = $this->config['path'] ?? './';
 
+		if ( isset( $this->config['filename'] ) ) {
+			return $path . $this->parse_filename( $this->config['filename'], $this->config, $locale );
+		}
+
+		// TODO: This should disappear with the filename
 		if ( isset( $this->config['type'] ) && $this->config['type'] === 'theme' ) {
 			return $path . "{$locale}.{$this->config['ext']}";
 		}
 
 		$filename_parts = [];
 
-		if ( isset( $this->config['filename'] ) ) {
-			$filename_parts[] = "{$this->config['filename']}";
-
-		} elseif ( isset( $this->config['domain'] ) ) {
+		if ( isset( $this->config['domain'] ) ) {
 			$filename_parts[] = "{$this->config['domain']}";
 		}
 
@@ -179,6 +182,7 @@ class Project {
 		}
 
 		// TODO: Should we only add this if the format/ext is also jed/json?
+		// TODO: this parameter can probably die since it can be hardcoded into filename
 		if ( isset( $this->config['js-handle'] ) ) {
 			$filename_parts[] = "{$this->config['js-handle']}";
 		}
@@ -205,12 +209,19 @@ class Project {
 	 * @since  0.0.0
 	 * @return string
 	 * @throws NoFilenameAvailableForPotFile
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	public function get_pot_path() : string {
 		$path = "{$this->config['destination']}";
 
 		if ( isset( $this->config['filename'] ) ) {
-			$path .= "{$this->config['filename']}";
+			return $path . $this->parse_filename(
+				$this->config['filename'],
+				array_merge(
+					$this->config,
+					[ 'ext' => 'pot' ],
+				)
+			);
 
 		} elseif ( isset( $this->config['domain'] ) ) {
 			$path .= "{$this->config['domain']}";
@@ -225,5 +236,47 @@ class Project {
 			);
 		}
 		return "{$path}.pot";
+	}
+
+	/**
+	 * Parse filename in config and replace requested arguments with their values.
+	 *
+	 * @since 0.0.0
+	 *
+	 * @param  string $filename
+	 * @param  array  $arg_values
+	 * @param  string $locale
+	 * @return string
+	 * @throws FilenameArgumentNotAvailable
+	 */
+	private function parse_filename(
+		string $filename,
+		array $arg_values,
+		string $locale = ''
+	) : string {
+
+		// Replace locale
+		$filename = str_replace( '{$locale}', $locale, $filename );
+
+		$matches = [];
+		preg_match_all( '/\{\$([a-zA-Z0-9_-]*)\}/', $filename, $matches );
+
+		foreach ( $matches[1] as $string_arg ) {
+
+			if ( ! isset( $arg_values[ $string_arg ] ) ) {
+				// TODO: make into a more specific argument.
+				throw new FilenameArgumentNotAvailable(
+					sprintf( 'Value for argument {$%s} in filename is not available.', $string_arg ),
+				);
+			}
+
+			$filename = str_replace(
+				sprintf( '{$%s}', $string_arg ),
+				$arg_values[ $string_arg ],
+				$filename
+			);
+		}
+
+		return $filename;
 	}
 }

@@ -26,6 +26,7 @@ class Translations {
 	 *
 	 * @return void
 	 * @throws AuthorizationFailed
+	 * @throws FilenameArgumentNotAvailable
 	 * @throws Exception
 	 */
 	public function download() {
@@ -53,6 +54,7 @@ class Translations {
 	 *
 	 * @return void
 	 * @throws AuthorizationFailed
+	 * @throws FilenameArgumentNotAvailable
 	 * @throws Exception
 	 */
 	public function upload() {
@@ -75,6 +77,7 @@ class Translations {
 	 * @return void
 	 * @throws DirectoryDoesntExist
 	 * @throws NoFilenameAvailableForPotFile
+	 * @throws FilenameArgumentNotAvailable
 	 * @throws Exception
 	 */
 	public function make_pots() {
