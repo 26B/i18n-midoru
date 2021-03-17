@@ -3,8 +3,8 @@
 namespace TwentySixB\Translations\Clients\Service;
 
 use Exception;
-use Loco\Http\ApiClient;
 use TwentySixB\Translations\Exceptions\AuthorizationFailed;
+use TwentySixB\Translations\LockHandler;
 
 /**
  * Client class for handling requests for Localise.
@@ -37,20 +37,32 @@ class Localise extends Client {
 		// Clean previous client.
 		$this->client = null;
 
-		// Make a new client.
-		$client = ApiClient::factory( $args );
+		$client = new \GuzzleHttp\Client(
+			[
+				'base_uri' => 'https://localise.biz/api/',
+				'headers'  => [
+					'Authorization' => 'Loco ' . $args['key'],
+				],
+			]
+		);
 
-		// Try to authenticate it.
-		try {
-			$result = $client->authVerify();
-			printf( "Authenticated as '%s'.\n", $result['user']['name'] );
-		} catch ( Exception $e ) {
+		$res = $client->request(
+			'GET',
+			'auth/verify',
+			[]
+		);
+
+		if ( $res->getStatusCode() !== 200 ) {
 			throw new AuthorizationFailed( 'Authorization was not successful.' );
 		}
 
+		$body = json_decode( $res->getBody()->__toString(), true );
+
+		printf( "Authenticated as '%s' in project '%s'.\n", $body['user']['name'], $body['project']['name'] );
+
 		// Save client and return result.
 		$this->client = $client;
-		return $result;
+		return $body;
 	}
 
 	/**
@@ -66,7 +78,19 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
-		return $this->client->exportLocale( $args );
+		$proj_name     = $args['__project_name'];
+		$last_modified = $args['__last_modified'];
+
+		$url = sprintf( 'export/locale/%s.%s', $args['locale'], $args['ext'] );
+		unset( $args['locale'], $args['ext'], $args['__project_name'], $args['__last_modified'] );
+
+		$url .= empty( $args ) ? '' : '?' . http_build_query( $args );
+
+		$res = $this->client->request( 'GET', $url, $this->get_export_options( $last_modified ) );
+
+		LockHandler::get_instance()->set( $proj_name, 'Last-Modified', $res->getHeaders()['Last-Modified'][0] );
+
+		return $res->getBody()->__toString();
 	}
 
 	/**
@@ -82,7 +106,15 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
-		return $this->client->import( $args );
+		$url  = sprintf( 'import/%s', $args['ext'] );
+		$body = $args['data'];
+		unset( $args['ext'], $args['data'] );
+
+		$url .= empty( $args ) ? '' : '?' . http_build_query( $args );
+
+		$res = $this->client->request( 'POST', $url, [ 'body' => $body ] );
+
+		return json_decode( $res->getBody()->__toString(), true );
 	}
 
 	/**
@@ -93,5 +125,29 @@ class Localise extends Client {
 	 */
 	public function get_api_key_prefix() : string {
 		return 'LOCALISE_';
+	}
+
+	/**
+	 * Get options for export.
+	 *
+	 * Check env or constant value for not checking if export has been modified since.
+	 *
+	 * @since  0.0.0
+	 * @param  string $last_modified
+	 * @return array
+	 */
+	private function get_export_options( string $last_modified ) : array {
+		if (
+			getenv( 'DONT_CHECK_MODIFIED' ) === 'true'
+			|| ( defined( 'DONT_CHECK_MODIFIED' ) && constant( 'DONT_CHECK_MODIFIED' ) )
+		) {
+			return [];
+		}
+
+		return [
+			'headers' => [
+				'If-Modified-Since' => $last_modified,
+			],
+		];
 	}
 }

@@ -1,9 +1,11 @@
 # Translation Helper
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/60718d18625e4201879774c318e5410f)](https://www.codacy.com/gh/26B/i18n-midoru/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=26B/i18n-midoru&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/60718d18625e4201879774c318e5410f)](https://www.codacy.com/gh/26B/i18n-midoru/dashboard?utm_source=github.com&utm_medium=referral&utm_content=26B/i18n-midoru&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0461849a3a1b42ed85fb17dac9cb7974)](https://www.codacy.com/gh/26B/i18n-midoru/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=26B/i18n-midoru&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/0461849a3a1b42ed85fb17dac9cb7974)](https://www.codacy.com/gh/26B/i18n-midoru/dashboard?utm_source=github.com&utm_medium=referral&utm_content=26B/i18n-midoru&utm_campaign=Badge_Coverage)
 
 This library has some helper functions/classes for dealing with exporting and importing translations based on a config file. Right now we're only supporting [Localise](https://localise.biz) as the source for translations.
+
+⚠️ This library is in active development so the API may suffer changes.
 
 ## How to use?
 

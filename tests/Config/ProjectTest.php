@@ -18,7 +18,7 @@ use TwentySixB\Translations\Exceptions\NoApiKeyAvailable;
  * @subpackage TODO:
  * @author     TODO:
  *
- * @coversDefaultClass TwentySixB\Translations\Config\Project
+ * @coversDefaultClass \TwentySixB\Translations\Config\Project
  */
 class ProjectTest extends TestCase {
 
@@ -445,7 +445,16 @@ class ProjectTest extends TestCase {
 				],
 				'pt_PT',
 				"{$path}pt_PT.{$ext}",
-			]
+			],
+			'Empty locale' => [
+				[
+					'path'   => $path,
+					'ext'    => $ext,
+					'domain' => $domain,
+				],
+				'',
+				"{$path}{$domain}.{$ext}",
+			],
 		];
 	}
 
