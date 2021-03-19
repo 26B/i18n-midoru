@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+require_once './vendor/autoload.php';
+use Symfony\Component\Console\Application;
+use TwentySixB\Translations\Console\{ DownloadCommand, MakePotsCommand, UploadCommand };
+
+$app = new Application();
+$app->add( new DownloadCommand() );
+$app->add( new MakePotsCommand() );
+$app->add( new UploadCommand() );
+$app->run();
