@@ -1,4 +1,4 @@
 <?php
 
-// First we need to load the composer autoloader so we can use WP Mock
+// First we need to load the composer autoloader.
 require_once './vendor/autoload.php';

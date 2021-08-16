@@ -3,6 +3,7 @@
 namespace TwentySixB\Translations\Console;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -32,7 +33,12 @@ class UploadCommand extends Command {
 	 */
 	protected function configure() {
 		$this->setDescription( 'Upload translations.' )
-			->setHelp( 'Uploads translations according to the configuration in i18n-midoru.json.' );
+			->setHelp( 'Uploads translations according to the configuration in i18n-midoru.json.' )
+			->addArgument(
+				'project_names',
+				InputArgument::IS_ARRAY,
+				'Wanted project names. By default, every project'
+			);
 	}
 
 	/**
@@ -45,7 +51,7 @@ class UploadCommand extends Command {
 	 */
 	protected function execute( InputInterface $input, OutputInterface $output ) {
 		$t = new \TwentySixB\Translations\Translations();
-		$t->upload();
+		$t->upload( $input->getArgument( 'project_names' ) );
 		return 0;
 	}
 }
