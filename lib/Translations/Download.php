@@ -37,7 +37,7 @@ class Download extends ServiceBase {
 	 * @since  0.0.0
 	 * @return array
 	 * @throws AuthorizationFailed
-	 * @throws Exception
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	public function download() : array {
 		$this->authenticate();
@@ -66,6 +66,7 @@ class Download extends ServiceBase {
 	 * @since  0.0.0
 	 * @param  array $downloads Downloads to save (keys are locales and values are the data to save)
 	 * @return void
+	 * @throws Exception
 	 */
 	public function save( array $downloads ) : void {
 		foreach( $downloads as $locale => $export ) {

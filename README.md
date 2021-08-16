@@ -5,6 +5,8 @@
 
 This library has some helper functions/classes for dealing with exporting and importing translations based on a config file. Right now we're only supporting [Localise](https://localise.biz) as the source for translations.
 
+⚠️ This library is in active development so the API may suffer changes.
+
 ## How to use?
 
 There are essentially three interfaces, they only differ on how they ingest the options to the Translations system.

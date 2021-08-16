@@ -8,9 +8,6 @@ use PHPUnit\Framework\TestCase;
 use TwentySixB\Translations\Clients\Generator\WP_I18n;
 use TwentySixB\Translations\Clients\Service\Localise;
 use TwentySixB\Translations\Config\Config;
-use TwentySixB\Translations\Input\Dataset;
-use TwentySixB\Translations\Input\File;
-use TwentySixB\Translations\Input\Input;
 
 /**
  * Testing the Config class.
@@ -38,7 +35,8 @@ class ConfigTest extends TestCase {
 	 * @dataProvider getData
 	 * @covers ::__construct
 	 * @covers ::get
-	 * @covers ::get_config
+	 * @covers ::prepare_config
+	 * @covers ::get_client
 	 * @testdox get - returns what is expected
 	 *
 	 * @param  array  $expected  Expected return of get.
@@ -51,8 +49,8 @@ class ConfigTest extends TestCase {
 		$config = new Config();
 		$output = $config->get( $purpose );
 		$this->assertCount( count( $expected ), $output );
-		foreach ( $output as $idx => $config ) {
-			$this->assertEquals( $expected[ $idx ], $config->get_config() );
+		foreach ( $output as $idx => $project_config ) {
+			$this->assertEquals( $expected[ $idx ], $project_config->get_config() );
 		}
 	}
 
@@ -62,6 +60,8 @@ class ConfigTest extends TestCase {
 	 * @since  0.0.0
 	 * @covers ::get
 	 * @covers ::__construct
+	 * @covers ::prepare_config
+	 * @covers ::get_client
 	 * @testdox get - client does not exist
 	 *
 	 * @return void
@@ -87,6 +87,8 @@ class ConfigTest extends TestCase {
 	 * @since  0.0.0
 	 * @covers ::__construct
 	 * @covers ::get
+	 * @covers ::prepare_config
+	 * @covers ::get_client
 	 * @testdox get - config doesn't have a 'client' value
 	 *
 	 * @return void
@@ -109,6 +111,8 @@ class ConfigTest extends TestCase {
 	 * @since  0.0.0
 	 * @covers ::__construct
 	 * @covers ::get
+	 * @covers ::prepare_config
+	 * @covers ::get_client
 	 * @testdox get - json file doesn't exist
 	 *
 	 * @return void
@@ -134,6 +138,8 @@ class ConfigTest extends TestCase {
 	 * @since  0.0.0
 	 * @covers ::__construct
 	 * @covers ::get
+	 * @covers ::prepare_config
+	 * @covers ::get_client
 	 * @testdox get - json file doesn't exist
 	 *
 	 * @return void

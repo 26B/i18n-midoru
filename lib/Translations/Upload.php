@@ -40,6 +40,7 @@ class Upload extends ServiceBase {
 	 * @since 0.0.0
 	 * @return void
 	 * @throws AuthorizationFailed
+	 * @throws FilenameArgumentNotAvailable
 	 * @throws Exception
 	 */
 	public function upload() : void {
@@ -89,6 +90,7 @@ class Upload extends ServiceBase {
 	 * @param  string $locale  Locale to import.
 	 * @return string
 	 * @throws SourceFileNotFound
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	private function get_data_to_import( string $locale ) : string {
 		$path = $this->config->get_path( $locale );
