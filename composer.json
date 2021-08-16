@@ -4,7 +4,8 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "guzzlehttp/guzzle": "^7.2"
+        "guzzlehttp/guzzle": "^7.2",
+        "symfony/console": "4.4.0"
     },
     "require-dev": {
       "phpunit/phpunit": "^9.0"
@@ -19,6 +20,9 @@
             "name": "26B",
             "email": "hello@26b.io"
         }
+    ],
+    "bin": [
+      "i18n-midoru"
     ],
     "scripts": {
       "test": [
