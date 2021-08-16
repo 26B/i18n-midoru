@@ -24,13 +24,15 @@ class Translations {
 	/**
 	 * Download translations.
 	 *
+	 * @param  string[] $wanted_projects Array of project names to make_pots for. Default is an
+	 *                                   empty array, all projects with `export` are considered.
 	 * @return void
 	 * @throws AuthorizationFailed
 	 * @throws FilenameArgumentNotAvailable
 	 * @throws Exception
 	 */
-	public function download() {
-		$projects_config = $this->config->get( 'export' );
+	public function download( array $wanted_projects = [] ) {
+		$projects_config = $this->config->get( 'export', $wanted_projects );
 
 		// Maybe handle project iteration here.
 		foreach ( $projects_config as $config ) {
@@ -52,13 +54,15 @@ class Translations {
 	/**
 	 * Upload files for translation.
 	 *
+	 * @param  string[] $wanted_projects Array of project names to make_pots for. Default is an
+	 *                                   empty array, all projects with `import` are considered.
 	 * @return void
 	 * @throws AuthorizationFailed
 	 * @throws FilenameArgumentNotAvailable
 	 * @throws Exception
 	 */
-	public function upload() {
-		$projects_config = $this->config->get( 'import' );
+	public function upload( array $wanted_projects = [] ) {
+		$projects_config = $this->config->get( 'import', $wanted_projects );
 
 		// Maybe handle project iteration here.
 		foreach ( $projects_config as $config ) {
@@ -74,14 +78,16 @@ class Translations {
 	/**
 	 * Make pot files.
 	 *
+	 * @param  string[] $wanted_projects Array of project names to make_pots for. Default is an
+	 *                                   empty array, all projects with `make_posts` are considered.
 	 * @return void
 	 * @throws DirectoryDoesntExist
 	 * @throws NoFilenameAvailableForPotFile
 	 * @throws FilenameArgumentNotAvailable
 	 * @throws Exception
 	 */
-	public function make_pots() {
-		$projects_config = $this->config->get( 'make_pots' );
+	public function make_pots( array $wanted_projects = [] ) {
+		$projects_config = $this->config->get( 'make_pots', $wanted_projects );
 
 		// Maybe handle project iteration here.
 		foreach ( $projects_config as $config ) {

@@ -44,13 +44,18 @@ class Config {
 	 * Get the merged data from all the input sources provided in the constructor.
 	 *
 	 * @since  0.0.0
-	 * @param  string $purpose Name of the purpose.
-	 * @return array           Array of Projects.
+	 * @param  string   $purpose         Name of the purpose.
+	 * @param  string[] $wanted_projects Array of project names to get configuration for. Default is
+	 *                                   an empty array, all projects are retrieved.
+	 * @return array                     Array of Projects.
 	 */
-	public function get( string $purpose ) : array {
+	public function get( string $purpose, array $wanted_projects = [] ) : array {
 		$project_configs = [];
 		foreach ( $this->config as $project_name => $config ) {
-			if ( ! isset( $config[ $purpose ] ) ) {
+			if (
+				! isset( $config[ $purpose ] )
+				|| ( ! empty( $wanted_projects ) && ! in_array( $project_name, $wanted_projects, true ) )
+			) {
 				continue;
 			}
 			$project_configs[] = new Project(
