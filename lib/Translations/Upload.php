@@ -31,6 +31,7 @@ class Upload extends ServiceBase {
 		'tag-new',
 		'tag-updated',
 		'tag-absent',
+		'delete-absent',
 		//TODO: do we put every URI parameter that localize can receive for import?
 	];
 
