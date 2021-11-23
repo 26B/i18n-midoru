@@ -1,5 +1,6 @@
 # Translation Helper
 
+[![Testing](https://github.com/26B/i18n-midoru/actions/workflows/testing.yml/badge.svg)](https://github.com/26B/i18n-midoru/actions/workflows/testing.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0461849a3a1b42ed85fb17dac9cb7974)](https://www.codacy.com/gh/26B/i18n-midoru/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=26B/i18n-midoru&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/0461849a3a1b42ed85fb17dac9cb7974)](https://www.codacy.com/gh/26B/i18n-midoru/dashboard?utm_source=github.com&utm_medium=referral&utm_content=26B/i18n-midoru&utm_campaign=Badge_Coverage)
 
