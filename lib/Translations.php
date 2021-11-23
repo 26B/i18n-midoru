@@ -113,7 +113,7 @@ class Translations {
 				[
 					'locale_data' => json_decode( $json, true ),
 				],
-				JSON_PRETTY_PRINT
+				JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
 			);
 		}
 		return $jsons;
