@@ -22,6 +22,7 @@ class Upload extends ServiceBase {
 	 * @var   array
 	 */
 	const ACCEPTED_IMPORT_KEYS = [
+		'__project_name', // The project from the config.
 		'locale',
 		'ext',
 		'data',
@@ -72,9 +73,10 @@ class Upload extends ServiceBase {
 	 * @return array
 	 */
 	private function make_import_config( string $locale, string $data ) : array {
-		$config           = $this->config->get_config();
-		$config['locale'] = $locale;
-		$config['data']   = $data;
+		$config                    = $this->config->get_config();
+		$config['__project_name']  = $this->config->get_name();
+		$config['locale']          = $locale;
+		$config['data']            = $data;
 		return array_filter(
 			$config,
 			function ( $key ) {

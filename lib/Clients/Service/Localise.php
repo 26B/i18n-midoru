@@ -3,6 +3,7 @@
 namespace TwentySixB\Translations\Clients\Service;
 
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use TwentySixB\Translations\Exceptions\AuthorizationFailed;
 use TwentySixB\Translations\LockHandler;
 
@@ -46,11 +47,12 @@ class Localise extends Client {
 			]
 		);
 
-		$res = $client->request(
-			'GET',
-			'auth/verify',
-			[]
-		);
+		try {
+			$res = $client->request( 'GET', 'auth/verify', [] );
+		} catch ( GuzzleException $e ) {
+			print( "\nException thrown while authenticating for project '{$args['__project_name']}'." );
+			throw $e;
+		}
 
 		if ( $res->getStatusCode() !== 200 ) {
 			throw new AuthorizationFailed( 'Authorization was not successful.' );
@@ -86,7 +88,12 @@ class Localise extends Client {
 
 		$url .= empty( $args ) ? '' : '?' . http_build_query( $args );
 
-		$res = $this->client->request( 'GET', $url, $this->get_export_options( $last_modified ) );
+		try {
+			$res = $this->client->request( 'GET', $url, $this->get_export_options( $last_modified ) );
+		} catch ( GuzzleException $e ) {
+			print( "\nException thrown while downloading for project '{$proj_name}'." );
+			throw $e;
+		}
 
 		LockHandler::get_instance()->set( $proj_name, 'Last-Modified', $res->getHeaders()['Last-Modified'][0] );
 
@@ -112,7 +119,12 @@ class Localise extends Client {
 
 		$url .= empty( $args ) ? '' : '?' . http_build_query( $args );
 
-		$res = $this->client->request( 'POST', $url, [ 'body' => $body ] );
+		try {
+			$res = $this->client->request( 'POST', $url, [ 'body' => $body ] );
+		} catch ( GuzzleException $e ) {
+			print( "\nException thrown while uploading for project '{$args['__project_name']}'." );
+			throw $e;
+		}
 
 		return json_decode( $res->getBody()->__toString(), true );
 	}
