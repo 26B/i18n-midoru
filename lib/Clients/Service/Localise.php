@@ -113,16 +113,17 @@ class Localise extends Client {
 			throw new Exception( 'Authenticate should be called first' );
 		}
 
-		$url  = sprintf( 'import/%s', $args['ext'] );
-		$body = $args['data'];
-		unset( $args['ext'], $args['data'] );
+		$proj_name = $args['__project_name'];
+		$url       = sprintf( 'import/%s', $args['ext'] );
+		$body      = $args['data'];
+		unset( $args['__project_name'], $args['ext'], $args['data'], );
 
 		$url .= empty( $args ) ? '' : '?' . http_build_query( $args );
 
 		try {
 			$res = $this->client->request( 'POST', $url, [ 'body' => $body ] );
 		} catch ( GuzzleException $e ) {
-			print( "\nException thrown while uploading for project '{$args['__project_name']}'." );
+			print( "\nException thrown while uploading for project '{$proj_name}'." );
 			throw $e;
 		}
 
