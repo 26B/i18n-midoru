@@ -42,7 +42,10 @@ abstract class ServiceBase {
 	protected function authenticate() {
 		$client = $this->config->get_client();
 		return $client->authenticate(
-			[ 'key' => $this->config->get_api_key( $client->get_api_key_prefix() ) ]
+			[
+				'key'            => $this->config->get_api_key( $client->get_api_key_prefix() ),
+				'__project_name' => $this->config->get_name(),
+			]
 		);
 	}
 }
