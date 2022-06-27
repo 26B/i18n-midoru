@@ -2,8 +2,8 @@
 
 namespace TwentySixB\Translations\Clients\Generator;
 
-use KKomelin\TranslatableStringExporter\Core\CodeParser;
 use TwentySixB\Translations\Utils\FileFinder;
+use TwentySixB\Translations\Utils\CodeParser;
 
 /**
  * Client class for handling generation of pot files using a string extractor for php and json files.
