@@ -95,7 +95,10 @@ class Localise extends Client {
 			throw $e;
 		}
 
-		LockHandler::get_instance()->set( $proj_name, 'Last-Modified', $res->getHeader( 'Last-Modified' )[0] );
+		$last_modified = $res->getHeader( 'Last-Modified' );
+		if ( ! empty( $last_modified ) ) {
+			LockHandler::get_instance()->set( $proj_name, 'Last-Modified', current( $last_modified ) );
+		}
 
 		return $res->getBody()->__toString();
 	}
