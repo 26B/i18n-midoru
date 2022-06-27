@@ -195,9 +195,9 @@ class Project {
 	 * Get value for 'source_path' in config.
 	 *
 	 * @since  0.0.0
-	 * @return string
+	 * @return string|array
 	 */
-	public function get_source_path() : string {
+	public function get_source_path() {
 		return $this->config['source'];
 	}
 
@@ -255,8 +255,8 @@ class Project {
 		string $locale = ''
 	) : string {
 
-		// Replace locale
-		$filename = str_replace( '{$locale}', $locale, $filename );
+		// Replace locale and locale with the first 2 characters.
+		$filename = str_replace( [ '{$locale}', '{$locale_2c}' ], [ $locale, str_split( $locale, 2 )[0] ], $filename );
 
 		$matches = [];
 		preg_match_all( '/\{\$([a-zA-Z0-9_-]*)\}/', $filename, $matches );
