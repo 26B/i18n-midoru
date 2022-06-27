@@ -2,65 +2,31 @@
 
 namespace TwentySixB\Translations\Clients\Generator;
 
-use Gettext\Scanner\PhpScanner;
-use Gettext\Generator\PoGenerator;
-use Gettext\Translation;
-use Gettext\Translations;
-use KKomelin\TranslatableStringExporter\Core\StringExtractor;
+use KKomelin\TranslatableStringExporter\Core\CodeParser;
+use TwentySixB\Translations\Utils\FileFinder;
 
 /**
- * Client class for handling generation of files using gettext for php files and a string extractor
- * for blade files.
+ * Client class for handling generation of pot files using a string extractor for php and json files.
  */
 class Laravel_Gettext extends Client {
 
 	public function generate( array $args ) {
-		$php_translations   = $this->get_php_translations( $args );
-		$blade_translations = $this->get_blade_translations( $args );
-		foreach ( $blade_translations as $blade_translation => $empty ) {
-			$php_translations->add( Translation::create( null, $blade_translation ) );
-		}
-
-		// Save the translations in .po files
-		$generator = new PoGenerator();
-
-		$generator->generateFile($php_translations, "{$args['destination']}");
+		// TODO: Remove domain from necessary args.
+		$translations = $this->extract_strings( $args );
+		$this->generate_file( $translations, (string) $args['destination'], $args );
 	}
 
-	private function get_php_translations( $args ) : Translations {
-		$translations = Translations::create( $args['domain'] );
-		$headers = $translations->getHeaders();
-		$headers->set( 'POT-Creation-Date', date( 'c' ) );
-		$headers->set( 'Content-Type', 'text/plain; charset=UTF-8' );
-		$headers->set( 'Content-Transfer-Encoding', '8bit' );
+	private function extract_strings( $args ) : array {
+		$finder  = new FileFinder( $args['source'] );  // TODO: Handle excluded directories.
+		$parser  = new CodeParser();
+		$strings = [];
 
-		// Create a new scanner, adding a translation for each domain we want to get:
-		$phpScanner = new PhpScanner( $translations );
+        $files = $finder->find();
+        foreach ( $files as $file ) {
+            $strings = array_merge( $strings, $parser->parse( $file ) );
+        }
 
-		// Set a default domain, so any translations with no domain specified, will be added to that domain
-		if ( $args['is_default'] ) {
-			$phpScanner->setDefaultDomain( $args['domain'] );
-		}
-
-		// Extract all comments starting with 'i18n:' and 'Translators:'
-		$phpScanner->extractCommentsStartingWith('i18n:', 'Translators:');
-
-		// Scan files.
-		$sources = is_array( $args['source'] ) ? $args['source'] : [ $args['source'] ];
-		foreach ( $sources as $source ) {
-			foreach ($this->glob_recursive("{$source}**/*.php") as $file) {
-				$phpScanner->scanFile($file);
-			}
-		}
-
-		return current( $phpScanner->getTranslations() );
-	}
-
-	private function get_blade_translations( $args ) : array {
-		// TODO: Handle domains.
-		// TODO: Optimize for only getting blade files.
-		$translations = ( new StringExtractor() )->extract();
-		return array_map( fn() => '', $translations );
+        return array_unique( $strings );
 	}
 
 	private function glob_recursive( $pattern, $flags = 0 ) {
@@ -69,5 +35,40 @@ class Laravel_Gettext extends Client {
 			$files = array_merge($files, $this->glob_recursive($dir.'/'.basename($pattern), $flags));
 		}
 		return $files;
+	}
+
+	private function generate_file( array $translations, string $file_path, array $args ) : void {
+		$file_string = $this->file_headers( $args );
+		foreach ( $translations as $translation ) {
+			$file_string .= sprintf(
+				"msgid \"%s\"\nmsgstr \"\"\n\n",
+				strtr(
+					$translation,
+					[
+						"\x00" => '',
+						'\\' => '\\\\',
+						"\t" => '\t',
+						"\r" => '\r',
+						"\n" => '\n',
+						'"' => '\\"',
+					]
+				)
+			);
+		}
+
+		file_put_contents( $file_path, $file_string );
+	}
+
+	private function file_headers( $args ) : string {
+		return sprintf(
+			"msgid \"\"
+msgstr \"\"
+\"Content-Transfer-Encoding: 8bit\\n\"
+\"Content-Type: text/plain; charset=UTF-8\\n\"
+\"POT-Creation-Date: %s\\n\"
+\"X-Domain: %s\\n\"\n\n",
+			date( 'c' ),
+			$args['domain']
+	);
 	}
 }
