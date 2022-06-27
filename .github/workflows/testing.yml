@@ -19,7 +19,7 @@ jobs:
     - name: Switch PHP Version
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.3'
+        php-version: '8.1.7'
         coverage: xdebug
 
     - name: Validate composer.json and composer.lock files
