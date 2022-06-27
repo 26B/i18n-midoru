@@ -24,7 +24,6 @@ class Laravel_Gettext extends Client {
 		// Save the translations in .po files
 		$generator = new PoGenerator();
 
-		// $php_translations->mergeWith( $blade_translations );
 		$generator->generateFile($php_translations, "{$args['destination']}");
 	}
 
