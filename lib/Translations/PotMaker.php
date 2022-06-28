@@ -48,12 +48,13 @@ class PotMaker {
 		$pot_path    = $this->config->get_pot_path();
 		$sources = is_array( $source_path ) ? $source_path : [ $source_path ];
 		foreach ( $sources as $source ) {
-			if ( ! is_dir( $source ) ) {
-				throw new DirectoryDoesntExist(
-					'Source directory for generating pots does not exist. Path received was:' .
-					" {$source}\n"
-				);
+			if ( is_dir( $source ) ) {
+				continue;
 			}
+			throw new DirectoryDoesntExist(
+				'Source directory for generating pots does not exist. Path received was:' .
+				" {$source}\n"
+			);
 		}
 		$matches = [];
 		preg_match( '/.*\//', $pot_path, $matches );
