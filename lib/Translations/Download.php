@@ -15,6 +15,13 @@ use TwentySixB\Translations\LockHandler;
 class Download extends ServiceBase {
 
 	/**
+	 * Default cooldown time in microseconds.
+	 *
+	 * @var int
+	 */
+	const DEFAULT_COOLDOWN = 100000;
+
+	/**
 	 * Keys that are accepted for exporting/downloading a locale.
 	 *
 	 * @since 0.0.0
@@ -45,8 +52,16 @@ class Download extends ServiceBase {
 
 		$lock          = LockHandler::get_instance();
 		$last_modified = $lock->get( $this->config->get_name(), 'Last-Modified', '' );
+		$cooldown      = $this->config->get_cooldown();
+		$cooldown_time = is_bool( $cooldown ) ? self::DEFAULT_COOLDOWN : $cooldown;
+		$first         = true;
 
 		foreach ( $this->config->get_locales() as $locale ) {
+			if ( $cooldown && ! $first ) {
+				usleep( $cooldown_time );
+			}
+			$first = false;
+
 			$export = $this->config->get_client()->export( $this->make_export_config( $locale, $last_modified ) );
 
 			if ( $export === '' ) {
