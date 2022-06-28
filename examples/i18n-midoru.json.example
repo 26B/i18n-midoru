@@ -1,0 +1,31 @@
+{
+  "plugin-content": {
+    "export" : {
+      "client"     : "localise",
+      "domain"     : "plugin-content",
+      "ext"        : "po",
+      "format"     : "gettext",
+      "locale"     : [ "pt_PT", "fr_FR" ],
+      "output_path": "./lib/",
+      "type"       : "plugin"
+    },
+    "import": {
+      "client"     : "localise",
+      "domain"     : "plugin-content",
+      "ext"        : "pot",
+      "format"     : "gettext",
+      "locale"     : "",
+      "path"       : "./lib/languages/",
+      "tag-new"    : "i18n-midoru",
+      "tag-updated": "i18n-midoru",
+      "type"       : "plugin"
+    },
+    "make_pots": {
+      "client"     : "WP_I18n",
+      "domain"     : "plugin-content",
+      "destination": "./lib/languages/",
+      "source"     : "./lib/",
+      "skip-js"    : true
+    }
+  }
+}

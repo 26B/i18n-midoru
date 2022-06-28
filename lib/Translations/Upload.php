@@ -22,6 +22,7 @@ class Upload extends ServiceBase {
 	 * @var   array
 	 */
 	const ACCEPTED_IMPORT_KEYS = [
+		'__project_name', // The project from the config.
 		'locale',
 		'ext',
 		'data',
@@ -31,6 +32,7 @@ class Upload extends ServiceBase {
 		'tag-new',
 		'tag-updated',
 		'tag-absent',
+		'delete-absent',
 		//TODO: do we put every URI parameter that localize can receive for import?
 	];
 
@@ -40,6 +42,7 @@ class Upload extends ServiceBase {
 	 * @since 0.0.0
 	 * @return void
 	 * @throws AuthorizationFailed
+	 * @throws FilenameArgumentNotAvailable
 	 * @throws Exception
 	 */
 	public function upload() : void {
@@ -70,9 +73,10 @@ class Upload extends ServiceBase {
 	 * @return array
 	 */
 	private function make_import_config( string $locale, string $data ) : array {
-		$config           = $this->config->get_config();
-		$config['locale'] = $locale;
-		$config['data']   = $data;
+		$config                    = $this->config->get_config();
+		$config['__project_name']  = $this->config->get_name();
+		$config['locale']          = $locale;
+		$config['data']            = $data;
 		return array_filter(
 			$config,
 			function ( $key ) {
@@ -89,6 +93,7 @@ class Upload extends ServiceBase {
 	 * @param  string $locale  Locale to import.
 	 * @return string
 	 * @throws SourceFileNotFound
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	private function get_data_to_import( string $locale ) : string {
 		$path = $this->config->get_path( $locale );

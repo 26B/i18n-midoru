@@ -6,6 +6,7 @@ namespace Tests\Config;
 use PHPUnit\Framework\TestCase;
 use TwentySixB\Translations\Clients\Service\Localise;
 use TwentySixB\Translations\Config\Project;
+use TwentySixB\Translations\Exceptions\FilenameArgumentNotAvailable;
 use TwentySixB\Translations\Exceptions\NoFilenameAvailableForPotFile;
 use TwentySixB\Translations\Exceptions\NoApiKeyAvailable;
 
@@ -16,6 +17,8 @@ use TwentySixB\Translations\Exceptions\NoApiKeyAvailable;
  * @package    TODO:
  * @subpackage TODO:
  * @author     TODO:
+ *
+ * @coversDefaultClass \TwentySixB\Translations\Config\Project
  */
 class ProjectTest extends TestCase {
 
@@ -25,6 +28,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getApiKeyData
+	 * @covers ::__construct
 	 * @covers ::get_api_key
 	 * @testdox get_api_key - returns what is expected
 	 *
@@ -59,6 +63,7 @@ class ProjectTest extends TestCase {
 	 * Test whether an expcetion is thrown when the project api key is not avaiable.
 	 *
 	 * @since 0.0.0
+	 * @covers ::__construct
 	 * @covers ::get_api_key
 	 * @testdox get_api_key - exception is thrown when key isn't available
 	 *
@@ -81,6 +86,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getLocalesData
+	 * @covers ::__construct
 	 * @covers ::get_locales
 	 * @testdox get_locales - returns what is expected
 	 *
@@ -97,6 +103,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_config
 	 * @testdox get_config - returns the entire config
 	 *
@@ -112,6 +119,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_name
 	 * @testdox get_name - returns the name in the config
 	 *
@@ -127,6 +135,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_domain
 	 * @testdox get_domain - returns the domain in the config
 	 *
@@ -142,6 +151,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_format
 	 * @testdox get_format - returns the format in the config
 	 *
@@ -156,6 +166,7 @@ class ProjectTest extends TestCase {
 	 * Test get_client returns the value for 'client' inside the config passed to the constructor.
 	 *
 	 * @since 0.0.0
+	 * @covers ::__construct
 	 * @covers ::get_client
 	 * @testdox get_client - returns the client in the config
 	 *
@@ -172,6 +183,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getSkipJsData
+	 * @covers ::__construct
 	 * @covers ::get_skip_js
 	 * @testdox get_skip_js - returns the skip-js in the config
 	 *
@@ -189,6 +201,7 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getWrapJedData
+	 * @covers ::__construct
 	 * @covers ::get_wrap_jed
 	 * @testdox get_wrap_jed - returns the wrap-jed in the config
 	 *
@@ -205,7 +218,9 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getPathData
+	 * @covers ::__construct
 	 * @covers ::get_path
+	 * @covers ::parse_filename
 	 * @testdox get_path - returns what is expected
 	 *
 	 * @param  array  $config   Config for Project.
@@ -218,10 +233,44 @@ class ProjectTest extends TestCase {
 	}
 
 	/**
+	 * Test get_path throws a FilenameArgumentNotAvailable exception when filename has an argument
+	 * that is not available in the config.
+	 *
+	 * @since 0.0.0
+	 *
+	 * @covers ::__construct
+	 * @covers ::get_path
+	 * @covers ::parse_filename
+	 * @testdox get_path - argument in filename is not available
+	 *
+	 * @return void
+	 */
+	public function testGetPathFilenameArgumentNotAvailable() : void {
+		try {
+			( new Project(
+				[
+					// Domain is not available.
+					'filename' => '{$domain}.{$ext}',
+					'ext'      => '.po',
+				]
+			) )->get_path( 'pt-pt' );
+
+		} catch ( FilenameArgumentNotAvailable $e ) {
+			$this->assertStringContainsString( '{$domain}', $e->getMessage() );
+			return;
+		}
+
+		$this->fail( 'Exception FilenameArgumentNotAvailable was not thrown as expected.' );
+	}
+
+	//TODO: test exception thrown in get_path
+
+	/**
 	 * Test get_source_path returns the source_path in the config.
 	 *
 	 * @since 0.0.0
 	 *
+	 * @covers ::__construct
 	 * @covers ::get_source_path
 	 * @testdox get_source_path - returns the source_path value in the config
 	 *
@@ -240,7 +289,9 @@ class ProjectTest extends TestCase {
 	 *
 	 * @since 0.0.0
 	 * @dataProvider getPotPathData
+	 * @covers ::__construct
 	 * @covers ::get_pot_path
+	 * @covers ::parse_filename
 	 * @testdox get_pot_path - returns what is expected
 	 *
 	 * @return void
@@ -253,6 +304,7 @@ class ProjectTest extends TestCase {
 	 * Test exception is thrown when filename or domain is not set in config.
 	 *
 	 * @since 0.0.0
+	 * @covers ::__construct
 	 * @covers ::get_pot_path
 	 * @testdox get_pot_path - no filename/domain available
 	 *
@@ -308,7 +360,6 @@ class ProjectTest extends TestCase {
 	 */
 	public function getPathData() : array {
 		$path      = 'output/path/';
-		$filename  = 'test_filename';
 		$domain    = 'test_domain';
 		$js_handle = 'test_handle';
 		$ext       = 'po';
@@ -318,7 +369,7 @@ class ProjectTest extends TestCase {
 					'ext'  => $ext,
 				],
 				'pt_PT',
-				"./pt_PT.{$ext}"
+				"./pt_PT.{$ext}",
 			],
 			'No filename or domain'                          => [
 				[
@@ -326,16 +377,25 @@ class ProjectTest extends TestCase {
 					'ext'  => $ext,
 				],
 				'pt_PT',
-				"{$path}pt_PT.{$ext}"
+				"{$path}pt_PT.{$ext}",
 			],
-			'Filename'                                       => [
+			'Filename with no arguments'                                       => [
 				[
 					'path'     => $path,
 					'ext'      => $ext,
-					'filename' => $filename,
+					'filename' => 'simple_filename',
 				],
 				'pt_PT',
-				"{$path}{$filename}-pt_PT.{$ext}"
+				"{$path}simple_filename",
+			],
+			'Filename with arguments'                                       => [
+				[
+					'path'     => $path,
+					'ext'      => $ext,
+					'filename' => 'test-{$locale}.{$ext}',
+				],
+				'pt_PT',
+				"{$path}test-pt_PT.{$ext}",
 			],
 			'Domain'                                         => [
 				[
@@ -344,28 +404,38 @@ class ProjectTest extends TestCase {
 					'domain' => $domain,
 				],
 				'pt_PT',
-				"{$path}{$domain}-pt_PT.{$ext}"
+				"{$path}{$domain}-pt_PT.{$ext}",
 			],
 			'Domain and Filename, filename takes precedence' => [
 				[
 					'path'     => $path,
 					'ext'      => $ext,
 					'domain'   => $domain,
-					'filename' => $filename,
+					'filename' => 'test-{$domain}-{$locale}.{$ext}',
 				],
 				'pt_PT',
-				"{$path}{$filename}-pt_PT.{$ext}"
+				"{$path}test-{$domain}-pt_PT.{$ext}",
 			],
 			'With js-handle' => [
 				[
 					'path'      => $path,
 					'ext'       => $ext,
 					'domain'    => $domain,
-					'filename'  => $filename,
-					'js-handle' => $js_handle
+					'js-handle' => $js_handle,
 				],
 				'pt_PT',
-				"{$path}{$filename}-pt_PT-{$js_handle}.{$ext}"
+				"{$path}{$domain}-pt_PT-{$js_handle}.{$ext}",
+			],
+			'With js-handle inside filename' => [
+				[
+					'path'      => $path,
+					'ext'       => $ext,
+					'domain'    => $domain,
+					'filename'  => 'test-{$domain}-{$locale}-{$js-handle}.{$ext}',
+					'js-handle' => $js_handle,
+				],
+				'pt_PT',
+				"{$path}test-{$domain}-pt_PT-{$js_handle}.{$ext}",
 			],
 			'Theme' => [
 				[
@@ -375,7 +445,16 @@ class ProjectTest extends TestCase {
 				],
 				'pt_PT',
 				"{$path}pt_PT.{$ext}",
-			]
+			],
+			'Empty locale' => [
+				[
+					'path'   => $path,
+					'ext'    => $ext,
+					'domain' => $domain,
+				],
+				'',
+				"{$path}{$domain}.{$ext}",
+			],
 		];
 	}
 
@@ -387,30 +466,36 @@ class ProjectTest extends TestCase {
 	 */
 	public function getPotPathData(): array {
 		$destination = 'output/path/';
-		$filename    = 'test_filename';
 		$domain      = 'test_domain';
 		return [
-			'Filename'                                       => [
+			'Filename without any arguments'                                       => [
 				[
 					'destination' => $destination,
-					'filename'    => $filename,
+					'filename'    => 'simple_filename',
 				],
-				"{$destination}{$filename}.pot"
+				"{$destination}simple_filename",
+			],
+			'Filename with arguments'                                       => [
+				[
+					'destination' => $destination,
+					'filename'    => 'simple_filename.{$ext}',
+				],
+				"{$destination}simple_filename.pot",
 			],
 			'Domain'                                         => [
 				[
 					'destination' => $destination,
 					'domain'      => $domain,
 				],
-				"{$destination}{$domain}.pot"
+				"{$destination}{$domain}.pot",
 			],
 			'Domain and Filename, filename takes precedence' => [
 				[
 					'destination' => $destination,
 					'domain'      => $domain,
-					'filename'    => $filename,
+					'filename'    => 'test-{$domain}.{$ext}',
 				],
-				"{$destination}{$filename}.pot"
+				"{$destination}test-{$domain}.pot",
 			],
 		];
 	}

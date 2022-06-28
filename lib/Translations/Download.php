@@ -2,6 +2,8 @@
 // phpcs:disable
 namespace TwentySixB\Translations\Translations;
 
+use TwentySixB\Translations\LockHandler;
+
 /**
  * Class for dealing with the export of tranlations from localise.
  *
@@ -19,6 +21,8 @@ class Download extends ServiceBase {
 	 * @var   array
 	 */
 	const ACCEPTED_EXPORT_KEYS = [
+		'__project_name', // The project from the config.
+		'__last_modified',
 		'locale',
 		'ext',
 		'format',
@@ -33,33 +37,26 @@ class Download extends ServiceBase {
 	 * @since  0.0.0
 	 * @return array
 	 * @throws AuthorizationFailed
-	 * @throws Exception
+	 * @throws FilenameArgumentNotAvailable
 	 */
 	public function download() : array {
 		$this->authenticate();
-		$downloads    = [];
-		$locales      = $this->config->get_locales();
-		$first_locale = current( $locales );
+		$downloads = [];
 
-		foreach ( $locales as $locale ) {
+		$lock          = LockHandler::get_instance();
+		$last_modified = $lock->get( $this->config->get_name(), 'Last-Modified', '' );
 
-			// Wait for 100 ms between requests, if we are not on the first request.
-			if ( $locale !== $first_locale ) {
-				usleep(100000);
-			}
-
-			$export = $this->config->get_client()->export( $this->make_export_config( $locale ) );
+		foreach ( $this->config->get_locales() as $locale ) {
+			$export = $this->config->get_client()->export( $this->make_export_config( $locale, $last_modified ) );
 
 			if ( $export === '' ) {
 				printf( "Download for language '{$locale}' was returned empty and was not saved.\n" );
 				continue;
 			}
-
 			printf( "Got download for language '{$locale}'.\n" );
 
 			$downloads[ $locale ] = $export;
 		}
-
 		return $downloads;
 	}
 
@@ -69,6 +66,7 @@ class Download extends ServiceBase {
 	 * @since  0.0.0
 	 * @param  array $downloads Downloads to save (keys are locales and values are the data to save)
 	 * @return void
+	 * @throws Exception
 	 */
 	public function save( array $downloads ) : void {
 		foreach( $downloads as $locale => $export ) {
@@ -86,9 +84,11 @@ class Download extends ServiceBase {
 	 * @param  string $locale  Locale to export.
 	 * @return array
 	 */
-	private function make_export_config( string $locale ) : array {
-		$config           = $this->config->get_config();
-		$config['locale'] = $locale;
+	private function make_export_config( string $locale, string $last_modified ) : array {
+		$config                    = $this->config->get_config();
+		$config['locale']          = $locale;
+		$config['__project_name']  = $this->config->get_name();
+		$config['__last_modified'] = $last_modified;
 		return array_filter(
 			$config,
 			function ( $key ) {
