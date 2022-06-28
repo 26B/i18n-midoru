@@ -5,7 +5,7 @@ namespace TwentySixB\Translations\Utils;
 use KKomelin\TranslatableStringExporter\Core\CodeParser as CoreCodeParser;
 
 /**
- * Code Parser, used for making pots in Laravel.
+ * Code Parser, used for extracting strings from Laravel projects.
  *
  * Extended to avoid use of `config` in order to be able to run the `make_pots` command via bin without laravel.
  */
@@ -16,8 +16,8 @@ class CodeParser extends CoreCodeParser {
 	) {
 		$this->functions = $functions;
 		$this->pattern   = str_replace('[FUNCTIONS]', implode('|', $this->functions), $this->pattern);
-        if ( $allow_newlines ) {
-            $this->pattern .= 's';
-        }
+		if ( $allow_newlines ) {
+			$this->pattern .= 's';
+		}
 	}
 }

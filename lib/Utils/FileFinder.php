@@ -7,7 +7,7 @@ use Symfony\Component\Finder\Finder;
 
 
 /**
- * File finder, used for making pots in Laravel.
+ * File finder, used for finding files in Laravel projects.
  *
  * Extended to avoid use of `config` and `base_path` in order to be able to run the `make_pots` command via bin without laravel.
  */

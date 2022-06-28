@@ -21,12 +21,12 @@ class Laravel_Gettext extends Client {
 		$parser  = new CodeParser();
 		$strings = [];
 
-        $files = $finder->find();
-        foreach ( $files as $file ) {
-            $strings = array_merge( $strings, $parser->parse( $file ) );
-        }
+		$files = $finder->find();
+		foreach ( $files as $file ) {
+			$strings = array_merge( $strings, $parser->parse( $file ) );
+		}
 
-        return array_unique( $strings );
+		return array_unique( $strings );
 	}
 
 	private function glob_recursive( $pattern, $flags = 0 ) {
