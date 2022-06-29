@@ -4,7 +4,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.4",
         "symfony/console": "4.4.0"
     },
     "require-dev": {
