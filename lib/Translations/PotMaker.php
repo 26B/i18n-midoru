@@ -46,10 +46,14 @@ class PotMaker {
 	public function make_pot() : void {
 		$source_path = $this->config->get_source_path();
 		$pot_path    = $this->config->get_pot_path();
-		if ( ! is_dir( $source_path ) ) {
+		$sources = is_array( $source_path ) ? $source_path : [ $source_path ];
+		foreach ( $sources as $source ) {
+			if ( is_dir( $source ) ) {
+				continue;
+			}
 			throw new DirectoryDoesntExist(
 				'Source directory for generating pots does not exist. Path received was:' .
-				" {$source_path}\n"
+				" {$source}\n"
 			);
 		}
 		$matches = [];
@@ -66,6 +70,7 @@ class PotMaker {
 				'destination' => $pot_path,
 				'domain'      => $this->config->get_domain(),
 				'skip-js'     => $this->config->get_skip_js(),
+				'is_default'  => $this->config->get_config()['is_default'] ?? false,
 			]
 		);
 	}

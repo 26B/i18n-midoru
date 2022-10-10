@@ -186,6 +186,14 @@ path ?(domain|filename-) locale ?(-js-handle) .ext
   - `bool` | `optional` | `default:` true
   - Whether the option `--skip-js` will be passed to the `wp i18n make-pots` command. Makes it so strings to be translated inside JS code will not be considered.
 
+## Framework specific
+
+### Laravel
+TODO:
+
+### WordPress
+TODO:
+
 ## TODO
 
 - Maybe rest of api params.
