@@ -16,11 +16,13 @@ class CodeParser extends CoreCodeParser {
 		bool $allow_newlines = false
 	) {
 		$this->functions = $functions;
-
-		$pattern         = str_replace('[FUNCTIONS]', implode('|', $this->functions), $this->basePattern);
-		if ( $allow_newlines ) {
-			$pattern .= 's';
+		$this->patterns  = [];
+		foreach ( $this->functions as $func ) {
+			$pattern = str_replace('[FUNCTIONS]', $func, $this->basePattern);
+			if ( $allow_newlines ) {
+				$pattern .= 's';
+			}
+			$this->patterns[ $pattern ] = null;
 		}
-		$this->patterns = [ $pattern ];
 	}
 }
