@@ -13,6 +13,8 @@ use TwentySixB\Translations\Translations\Upload;
  */
 class Translations {
 
+	private Config $config;
+
 	/**
 	 * @since 0.0.0
 	 */
