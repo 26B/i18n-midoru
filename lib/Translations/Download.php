@@ -35,6 +35,8 @@ class Download extends ServiceBase {
 		'format',
 		'source', //TODO: check if we actually want this, see localize API
 		'index', //TODO: check if we actually want this, see localize API
+		'status', //TODO: check if we actually want this, see localize API
+		'no-folding', //TODO: check if we actually want this, see localize API
 		//TODO: do we put every URI parameter that localize can receive for export?
 	];
 
