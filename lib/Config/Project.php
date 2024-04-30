@@ -239,6 +239,26 @@ class Project {
 	}
 
 	/**
+	 * Get cooldown parameter.
+	 *
+	 * @return int|bool Positive int or boolean.
+	 */
+	public function get_cooldown() {
+		if (
+			! isset( $this->config['cooldown'] )
+			|| ( is_int( $this->config['cooldown'] ) && $this->config['cooldown'] <= 0 )
+		) {
+			return false;
+		}
+
+		if ( is_bool( $this->config['cooldown'] ) || is_int( $this->config['cooldown'] ) ) {
+			return $this->config['cooldown'];
+		}
+
+		return false;
+	}
+
+	/**
 	 * Parse filename in config and replace requested arguments with their values.
 	 *
 	 * @since 0.0.0

@@ -4,6 +4,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
+        "php": ">=8.0.2",
         "guzzlehttp/guzzle": "^7.2",
         "symfony/console": "^6.0",
         "kkomelin/laravel-translatable-string-exporter": "^1.22"
