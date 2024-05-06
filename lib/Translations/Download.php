@@ -35,6 +35,8 @@ class Download extends ServiceBase {
 		'format',
 		'source', //TODO: check if we actually want this, see localize API
 		'index', //TODO: check if we actually want this, see localize API
+		'status', //TODO: check if we actually want this, see localize API
+		'no-folding', //TODO: check if we actually want this, see localize API
 		//TODO: do we put every URI parameter that localize can receive for export?
 	];
 
@@ -85,8 +87,13 @@ class Download extends ServiceBase {
 	 */
 	public function save( array $downloads ) : void {
 		foreach( $downloads as $locale => $export ) {
+			$path     = $this->config->get_path( $locale );
+			$dir_path = dirname( $path );
+			if ( ! is_dir( $dir_path ) ) {
+				mkdir( $dir_path, 0777, true );
+			}
 			file_put_contents(
-				$this->config->get_path( $locale ),
+				$path,
 				$export
 			);
 		}
