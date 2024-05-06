@@ -12,7 +12,7 @@ use KKomelin\TranslatableStringExporter\Core\CodeParser as CoreCodeParser;
 class CodeParser extends CoreCodeParser {
 
 	public function __construct(
-		array $functions = [ '__', '_t', '@lang' ],
+		array $functions = [ '__', '_t', '@lang', 'trans_choice' ],
 		bool $allow_newlines = false
 	) {
 		$this->functions = $functions;
