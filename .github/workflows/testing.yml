@@ -46,13 +46,12 @@ jobs:
     - name: Run test suite with coverage
       run: composer run-script test -- --stop-on-failure --coverage-clover clover.xml
 
-    - name: Save report as artifact
-      uses: actions/upload-artifact@v4
+    - name: Run codacy-coverage-reporter
+      uses: codacy/codacy-coverage-reporter-action@v1.3.0
       with:
-        name: test-coverage-report
-        path: clover.xml
-
-    - name: Upload coverage
-      env:
-        CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_API }}
-      run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
+        project-token: ${{ secrets.CODACY_PROJECT_API }}
+        # or
+        # api-token: ${{ secrets.CODACY_API_TOKEN }}
+        coverage-reports: clover.xml
+        # or a comma-separated list for multiple reports
+        # coverage-reports: <PATH_TO_REPORT>, <PATH_TO_REPORT>
