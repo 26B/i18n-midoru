@@ -18,6 +18,11 @@ use TwentySixB\Translations\Clients\Generator\Client as GeneratorClient;
 class PotMaker {
 
 	/**
+	 * @var Project
+	 */
+	protected Project $config;
+
+	/**
 	 * @since 0.0.0
 	 * @param Project $config Project config.
 	 * @throws Exception
