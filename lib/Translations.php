@@ -14,6 +14,11 @@ use TwentySixB\Translations\Translations\Upload;
 class Translations {
 
 	/**
+	 * @var Config
+	 */
+	protected Config $config;
+
+	/**
 	 * @since 0.0.0
 	 */
 	public function __construct() {

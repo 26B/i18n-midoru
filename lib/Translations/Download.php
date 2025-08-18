@@ -2,6 +2,7 @@
 // phpcs:disable
 namespace TwentySixB\Translations\Translations;
 
+use TwentySixB\Translations\Config\Project;
 use TwentySixB\Translations\LockHandler;
 
 /**

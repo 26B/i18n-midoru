@@ -17,6 +17,11 @@ use TwentySixB\Translations\Config\Project;
 abstract class ServiceBase {
 
 	/**
+	 * @var Project
+	 */
+	protected Project $config;
+
+	/**
 	 * @param Project $config
 	 * @throws Exception
 	 */
