@@ -49,7 +49,7 @@ class DownloadCommand extends Command {
 	 * @param  OutputInterface $output
 	 * @return int
 	 */
-	protected function execute( InputInterface $input, OutputInterface $output ) {
+	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$t = new \TwentySixB\Translations\Translations();
 		$t->download( $input->getArgument( 'project_names' ) );
 		return 0;
