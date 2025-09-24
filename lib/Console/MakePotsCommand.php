@@ -2,10 +2,13 @@
 
 namespace TwentySixB\Translations\Console;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(name: 'make-pots')]
 
 /**
  * Command for making pot files.
@@ -16,14 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author     TODO:
  */
 class MakePotsCommand extends Command {
-
-	/**
-	 * Command name.
-	 *
-	 * @since 0.0.0
-	 * @var   string
-	 */
-	protected static $defaultName = 'make_pots';
 
 	/**
 	 * Configure command.

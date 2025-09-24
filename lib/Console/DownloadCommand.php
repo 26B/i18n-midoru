@@ -2,28 +2,23 @@
 
 namespace TwentySixB\Translations\Console;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'download')]
+
 /**
  * Command for downloading translations.
  *
  * @since      0.0.0
- * @package    TODO:
+ * @package    TwentySixB\Translations\Console
  * @subpackage TODO:
  * @author     TODO:
  */
 class DownloadCommand extends Command {
-
-	/**
-	 * Command name.
-	 *
-	 * @since 0.0.0
-	 * @var   string
-	 */
-	protected static $defaultName = 'download';
 
 	/**
 	 * Configure command.

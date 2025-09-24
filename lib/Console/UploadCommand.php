@@ -2,10 +2,13 @@
 
 namespace TwentySixB\Translations\Console;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(name: 'upload')]
 
 /**
  * Command for uploading translations.
@@ -16,14 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author     TODO:
  */
 class UploadCommand extends Command {
-
-	/**
-	 * Command name.
-	 *
-	 * @since 0.0.0
-	 * @var   string
-	 */
-	protected static $defaultName = 'upload';
 
 	/**
 	 * Configure command.
