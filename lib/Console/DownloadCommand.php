@@ -13,17 +13,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command for downloading translations.
  *
- * @since      0.0.0
- * @package    TwentySixB\Translations\Console
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Console
+ * @author     26B <hello@26b.io>
  */
 class DownloadCommand extends Command {
 
 	/**
 	 * Configure command.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return void
 	 */
 	protected function configure() {
@@ -39,7 +39,7 @@ class DownloadCommand extends Command {
 	/**
 	 * Execute command.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  InputInterface  $input
 	 * @param  OutputInterface $output
 	 * @return int

@@ -1,5 +1,4 @@
 <?php
-
 namespace TwentySixB\Translations\Translations;
 
 use Exception;
@@ -10,10 +9,10 @@ use TwentySixB\Translations\Clients\Generator\Client as GeneratorClient;
 /**
  * Class for handling the creation of .pot files.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Translations
+ * @author     26B <hello@26b.io>
  */
 class PotMaker {
 
@@ -23,7 +22,7 @@ class PotMaker {
 	protected Project $config;
 
 	/**
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @param Project $config Project config.
 	 * @throws Exception
 	 */
@@ -42,7 +41,7 @@ class PotMaker {
 	/**
 	 * Make a single pot file given the config received in the constructor.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @return void
 	 * @throws DirectoryDoesntExist
 	 * @throws FilenameArgumentNotAvailable

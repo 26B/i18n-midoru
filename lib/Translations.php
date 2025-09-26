@@ -19,7 +19,7 @@ class Translations {
 	protected Config $config;
 
 	/**
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 */
 	public function __construct() {
 		$this->config = new Config();
@@ -108,7 +108,7 @@ class Translations {
 	/**
 	 * Wrap jsons with a layer with the key 'locale_data'.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $jsons
 	 * @return array
 	 */

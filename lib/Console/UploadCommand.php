@@ -13,17 +13,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command for uploading translations.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Console
+ * @author     26B <hello@26b.io>
  */
 class UploadCommand extends Command {
 
 	/**
 	 * Configure command.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return void
 	 */
 	protected function configure() {
@@ -39,12 +39,12 @@ class UploadCommand extends Command {
 	/**
 	 * Execute command.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  InputInterface  $input
 	 * @param  OutputInterface $output
 	 * @return int
 	 */
-	protected function execute( InputInterface $input, OutputInterface $output ) {
+	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$t = new \TwentySixB\Translations\Translations();
 		$t->upload( $input->getArgument( 'project_names' ) );
 		return 0;

@@ -1,17 +1,15 @@
 <?php
-// phpcs:disable
 namespace TwentySixB\Translations\Translations;
 
-use TwentySixB\Translations\Config\Project;
 use TwentySixB\Translations\LockHandler;
 
 /**
  * Class for dealing with the export of tranlations from localise.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Translations
+ * @author     26B <hello@26b.io>
  */
 class Download extends ServiceBase {
 
@@ -25,7 +23,7 @@ class Download extends ServiceBase {
 	/**
 	 * Keys that are accepted for exporting/downloading a locale.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	const ACCEPTED_EXPORT_KEYS = [
@@ -42,7 +40,7 @@ class Download extends ServiceBase {
 	/**
 	 * Download and return the exports given the config, projects and locales.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return array
 	 * @throws AuthorizationFailed
 	 * @throws FilenameArgumentNotAvailable
@@ -79,7 +77,7 @@ class Download extends ServiceBase {
 	/**
 	 * Save the downloads receive given the path in the config for each locale.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $downloads Downloads to save (keys are locales and values are the data to save)
 	 * @return void
 	 * @throws Exception
@@ -96,7 +94,7 @@ class Download extends ServiceBase {
 	/**
 	 * Make the config for exporting a locale for a specific project.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  string $locale  Locale to export.
 	 * @return array
 	 */

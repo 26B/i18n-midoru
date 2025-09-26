@@ -7,17 +7,17 @@ use Exception;
 /**
  * Client class for handling generation of files using wp i18n.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Clients
+ * @author     26B <hello@26b.io>
  */
 class WP_I18n extends Client {
 
 	/**
 	 * Template for making the wp i18n make-pot command for creating the .pot files.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var   string
 	 *
 	 * TODO: This is specific for make-pot right now.
@@ -27,7 +27,7 @@ class WP_I18n extends Client {
 	/**
 	 * Generate files according to the arguments.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $args Arguments for generation.
 	 * @return null
 	 * @throws Exception

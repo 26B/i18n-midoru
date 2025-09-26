@@ -10,17 +10,17 @@ use TwentySixB\Translations\LockHandler;
 /**
  * Client class for handling requests for Localise.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Clients
+ * @author     26B <hello@26b.io>
  */
 class Localise extends Client {
 
 	/**
 	 * Localise/Loco client.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var   ApiClient|null
 	 */
 	private $client = null;
@@ -29,7 +29,7 @@ class Localise extends Client {
 	 * Create a Localise client and try to authenticate it using the arguments given, assuming there
 	 * is a value for 'key' and its value is the api key for localise.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $args Arguments for authentication
 	 * @return mixed       Authenticate result.
 	 * @throws AuthorizationFailed
@@ -70,7 +70,7 @@ class Localise extends Client {
 	/**
 	 * Export locale data from Localise.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $args Arguments for exporting
 	 * @return string      Export result.
 	 * @throws Exception
@@ -106,7 +106,7 @@ class Localise extends Client {
 	/**
 	 * Import data to Localise.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $args Arguments for exporting
 	 * @return string      Export result.
 	 * @throws Exception
@@ -136,7 +136,7 @@ class Localise extends Client {
 	/**
 	 * Get the suffix for the api key for localise.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return string
 	 */
 	public function get_api_key_prefix() : string {
@@ -148,7 +148,7 @@ class Localise extends Client {
 	 *
 	 * Check env or constant value for not checking if export has been modified since.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  string $last_modified
 	 * @return array
 	 */

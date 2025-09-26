@@ -7,17 +7,16 @@ use ArrayObject;
 /**
  * Handles the lock file, reading and writing.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @author     26B <hello@26b.io>
  */
 class LockHandler {
 
 	/**
 	 * Singleton instance.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var   null|LockHandler
 	 */
 	private static $instance = null;
@@ -25,7 +24,7 @@ class LockHandler {
 	/**
 	 * Lock file name.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	const FILENAME = 'i18n-midoru.lock';
@@ -33,7 +32,7 @@ class LockHandler {
 	/**
 	 * Lock data.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var array
 	 */
 	private $data = [];
@@ -41,7 +40,7 @@ class LockHandler {
 	/**
 	 * File path to lock.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	private $path = '';
@@ -49,7 +48,7 @@ class LockHandler {
 	/**
 	 * If data has been changed since the last writing.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var boolean
 	 */
 	private $is_dirty = false;
@@ -57,7 +56,7 @@ class LockHandler {
 	/**
 	 * Get the singleton instance or create one if it doesn't exist.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return LockHandler
 	 */
 	public static function get_instance() : LockHandler {
@@ -67,7 +66,7 @@ class LockHandler {
 	/**
 	 * Read the data from lock file if it exists.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 */
 	private function __construct() {
 		$this->path = getcwd() . '/' . self::FILENAME;
@@ -82,7 +81,7 @@ class LockHandler {
 	/**
 	 * Set property value for a project.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @param string $project
 	 * @param string $property
 	 * @param mixed  $value
@@ -99,7 +98,7 @@ class LockHandler {
 	/**
 	 * Get the property value for a project.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @param string $project
 	 * @param string $property
 	 * @param mixed  $default
@@ -112,7 +111,7 @@ class LockHandler {
 	/**
 	 * Write the currently loaded data to the lock file, if there are any changes.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return void
 	 * @throws Exception When file open fails.
 	 */
@@ -138,7 +137,7 @@ class LockHandler {
 	 *
 	 * If a project config changed, then its data will be emptied except for its new md5.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $config
 	 * @return void
 	 */

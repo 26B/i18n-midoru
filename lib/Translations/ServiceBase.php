@@ -1,5 +1,4 @@
 <?php
-// phpcs:disable
 namespace TwentySixB\Translations\Translations;
 
 use Exception;
@@ -9,10 +8,10 @@ use TwentySixB\Translations\Config\Project;
 /**
  * Base class for dealing with Service requests, like Download and Upload.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Translations
+ * @author     26B <hello@26b.io>
  */
 abstract class ServiceBase {
 
@@ -40,7 +39,7 @@ abstract class ServiceBase {
 	/**
 	 * Autenticate via the client using the config's api key.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return mixed Client's authenticate output
 	 * @throws AuthorizationFailed
 	 */

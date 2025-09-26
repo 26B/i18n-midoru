@@ -13,7 +13,7 @@ use TwentySixB\Translations\Exceptions\NoApiKeyAvailable;
 /**
  * Testing the Project class.
  *
- * @since 0.0.0
+ * @since 1.0.0
  * @package    TODO:
  * @subpackage TODO:
  * @author     TODO:
@@ -26,7 +26,7 @@ class ProjectTest extends TestCase {
 	 * Test getting the api key for a project, be it via the environment variable or the key field
 	 * in the project's config.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @dataProvider getApiKeyData
 	 * @covers ::__construct
 	 * @covers ::get_api_key
@@ -62,7 +62,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test whether an expcetion is thrown when the project api key is not avaiable.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @covers ::__construct
 	 * @covers ::get_api_key
 	 * @testdox get_api_key - exception is thrown when key isn't available
@@ -84,7 +84,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test get_locales returns what is expected.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @dataProvider getLocalesData
 	 * @covers ::__construct
 	 * @covers ::get_locales
@@ -101,7 +101,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test get_config returns the entire config passed to the constructor.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 *
 	 * @covers ::__construct
 	 * @covers ::get_config
@@ -117,7 +117,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test get_name returns the name field inside the config passed to the constructor.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 *
 	 * @covers ::__construct
 	 * @covers ::get_name
@@ -133,7 +133,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test get_domain returns the domain field inside the config passed to the constructor.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 *
 	 * @covers ::__construct
 	 * @covers ::get_domain
@@ -149,7 +149,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test get_format returns the format field inside the config passed to the constructor.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 *
 	 * @covers ::__construct
 	 * @covers ::get_format
@@ -165,7 +165,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test get_client returns the value for 'client' inside the config passed to the constructor.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @covers ::__construct
 	 * @covers ::get_client
 	 * @testdox get_client - returns the client in the config
@@ -181,7 +181,7 @@ class ProjectTest extends TestCase {
 	 * Test get_skip_js returns the value for 'skip-js' inside the config passed to the constructor
 	 * or the default value.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @dataProvider getSkipJsData
 	 * @covers ::__construct
 	 * @covers ::get_skip_js
@@ -199,7 +199,7 @@ class ProjectTest extends TestCase {
 	 * Test get_wrap_jed returns the value for 'wrap-jed' inside the config passed to the
 	 * constructor or the default value.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @dataProvider getWrapJedData
 	 * @covers ::__construct
 	 * @covers ::get_wrap_jed
@@ -216,7 +216,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test get_path returs the path correctly given the config passed.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @dataProvider getPathData
 	 * @covers ::__construct
 	 * @covers ::get_path
@@ -236,7 +236,7 @@ class ProjectTest extends TestCase {
 	 * Test get_path throws a FilenameArgumentNotAvailable exception when filename has an argument
 	 * that is not available in the config.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 *
 	 * @covers ::__construct
 	 * @covers ::get_path
@@ -268,7 +268,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test get_source_path returns the source_path in the config.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 *
 	 * @covers ::__construct
 	 * @covers ::get_source_path
@@ -287,7 +287,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test get_pot_path returns whats is expected given the config.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @dataProvider getPotPathData
 	 * @covers ::__construct
 	 * @covers ::get_pot_path
@@ -303,7 +303,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Test exception is thrown when filename or domain is not set in config.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @covers ::__construct
 	 * @covers ::get_pot_path
 	 * @testdox get_pot_path - no filename/domain available
@@ -318,7 +318,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Data for testing get_api_key.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return array
 	 */
 	public function getApiKeyData() : array {
@@ -341,7 +341,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Data for testing get_locales.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return array
 	 */
 	public function getLocalesData() : array {
@@ -355,7 +355,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Data for testing get_path.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return array
 	 */
 	public function getPathData() : array {
@@ -461,7 +461,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Data for testing get_pot_path.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return array
 	 */
 	public function getPotPathData(): array {
@@ -503,7 +503,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Data for testing get_wrap_jed.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return array
 	 */
 	public function getWrapJedData() : array {
@@ -522,7 +522,7 @@ class ProjectTest extends TestCase {
 	/**
 	 * Data for testing get_skip_js.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return array
 	 */
 	public function GetSkipJsData() : array {

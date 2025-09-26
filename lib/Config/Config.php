@@ -12,23 +12,23 @@ use TwentySixB\Translations\LockHandler;
 /**
  * Class for dealing with the config files.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Config
+ * @author     26B <hello@26b.io>
  */
 class Config {
 
 	/**
 	 * Array of the loaded config.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	private $config = [];
 
 	/**
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * TODO: be able to read from custom path.
 	 */
 	public function __construct() {
@@ -43,7 +43,7 @@ class Config {
 	/**
 	 * Get the merged data from all the input sources provided in the constructor.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  string   $purpose         Name of the purpose.
 	 * @param  string[] $wanted_projects Array of project names to get configuration for. Default is
 	 *                                   an empty array, all projects are retrieved.
@@ -78,7 +78,7 @@ class Config {
 	 * 'localise' or 'Localise'). If that class exists, it creates using that. If not, then an
 	 * exception is thrown.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  string $name   Project Name
 	 * @param  array  $config Config for a Project
 	 * @return Client

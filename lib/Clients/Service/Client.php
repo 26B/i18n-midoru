@@ -7,17 +7,17 @@ use TwentySixB\Translations\Clients\Client as BaseClient;
 /**
  * Base client class for handling services.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Clients
+ * @author     26B <hello@26b.io>
  */
 abstract class Client extends BaseClient {
 
 	/**
 	 * Authenticate the client for the service using the provided arguments.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $args Arguments for authentication
 	 * @return mixed       Authenticate result.
 	 */
@@ -28,7 +28,7 @@ abstract class Client extends BaseClient {
 	/**
 	 * Export data from the service.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $args Arguments for exporting
 	 * @return mixed       Export result.
 	 */
@@ -39,7 +39,7 @@ abstract class Client extends BaseClient {
 	/**
 	 * Import data into the service.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  array $args Arguments for importing
 	 * @return mixed       Import result.
 	 */
@@ -50,7 +50,7 @@ abstract class Client extends BaseClient {
 	/**
 	 * Get the suffix for the api key for the service.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return string
 	 */
 	public function get_api_key_prefix() : string {

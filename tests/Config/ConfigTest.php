@@ -12,7 +12,7 @@ use TwentySixB\Translations\Config\Config;
 /**
  * Testing the Config class.
  *
- * @since 0.0.0
+ * @since 1.0.0
  * @package    TODO:
  * @subpackage TODO:
  * @author     TODO:
@@ -31,7 +31,7 @@ class ConfigTest extends TestCase {
 	/**
 	 * Test get returns what is expected.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @dataProvider getData
 	 * @covers ::__construct
 	 * @covers ::get
@@ -57,7 +57,7 @@ class ConfigTest extends TestCase {
 	/**
 	 * Test get when the passed client does not exist.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @covers ::get
 	 * @covers ::__construct
 	 * @covers ::prepare_config
@@ -84,7 +84,7 @@ class ConfigTest extends TestCase {
 	/**
 	 * Test get when the config does not have a 'client' value.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @covers ::__construct
 	 * @covers ::get
 	 * @covers ::prepare_config
@@ -108,7 +108,7 @@ class ConfigTest extends TestCase {
 	/**
 	 * Test get when the config doesn't exist.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @covers ::__construct
 	 * @covers ::get
 	 * @covers ::prepare_config
@@ -135,7 +135,7 @@ class ConfigTest extends TestCase {
 	/**
 	 * Test get when the config doesn't exist.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @covers ::__construct
 	 * @covers ::get
 	 * @covers ::prepare_config
@@ -160,7 +160,7 @@ class ConfigTest extends TestCase {
 	 *
 	 * TODO: no way to override getopt for CLI, so we can't test it.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @return array
 	 */
 	public function getData() : array {

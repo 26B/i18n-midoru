@@ -10,23 +10,23 @@ use TwentySixB\Translations\Exceptions\NoApiKeyAvailable;
 /**
  * Class for handling a specific purpose config for a Project.
  *
- * @since      0.0.0
- * @package    TODO:
- * @subpackage TODO:
- * @author     TODO:
+ * @since      1.0.0
+ * @package    TwentySixB\Translations
+ * @subpackage TwentySixB\Translations\Config
+ * @author     26B <hello@26b.io>
  */
 class Project {
 
 	/**
 	 * Config data.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	private $config = [];
 
 	/**
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @param array $config Config for project. Expected to be the config for a specific purpose and
 	 *                      have the field 'name' defined. The field 'key', wiht value for api key,
 	 *                      is optional as the value can be retrieved from an environment variable
@@ -42,7 +42,7 @@ class Project {
 	 * Api key can be passed inside the config under the field 'key' but this is optional as the
 	 * environment variable '{$prefix}_{name_of_project}' has priority if it exists.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  string $prefix Prefix for the api key name.
 	 * @return string         API key value.
 	 * @throws NoApiKeyAvailable When key cannot be retrieved.
@@ -70,7 +70,7 @@ class Project {
 	/**
 	 * Get an array of the locales defined inside the 'locale' field in the config.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return array
 	 */
 	public function get_locales() : array {
@@ -83,7 +83,7 @@ class Project {
 	/**
 	 * Get the config that was passed in the constructor.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return array
 	 */
 	public function get_config() : array {
@@ -93,7 +93,7 @@ class Project {
 	/**
 	 * Get the name under the field 'name' in the config.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return string
 	 */
 	public function get_name() : string {
@@ -103,7 +103,7 @@ class Project {
 	/**
 	 * Get the domain under the field 'domain' in the config.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return string
 	 */
 	public function get_domain() : string {
@@ -113,7 +113,7 @@ class Project {
 	/**
 	 * Get the format under the field 'format' in the config.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return string
 	 */
 	public function get_format() : string {
@@ -123,7 +123,7 @@ class Project {
 	/**
 	 * Get the Client under the field 'client' in the config.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return Client
 	 */
 	public function get_client() : Client {
@@ -133,7 +133,7 @@ class Project {
 	/**
 	 * Get the value under the field 'skip-js' in the config.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return string
 	 */
 	public function get_skip_js() : bool {
@@ -144,7 +144,7 @@ class Project {
 	/**
 	 * Get the value under the field 'wrap-jed' in the config. Default value is true if not defined.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return bool
 	 */
 	public function get_wrap_jed() : bool {
@@ -154,7 +154,7 @@ class Project {
 	/**
 	 * Get the path for the file.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  string $locale Code for the locale for the name of the file.
 	 * @return string         Path for the file.
 	 * @throws FilenameArgumentNotAvailable
@@ -194,7 +194,7 @@ class Project {
 	/**
 	 * Get value for 'source_path' in config.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return string
 	 */
 	public function get_source_path() : string {
@@ -206,7 +206,7 @@ class Project {
 	 *
 	 * TODO: similar to get_path (Maybe join the two, but would require more arguments)
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @return string
 	 * @throws NoFilenameAvailableForPotFile
 	 * @throws FilenameArgumentNotAvailable
@@ -261,7 +261,7 @@ class Project {
 	/**
 	 * Parse filename in config and replace requested arguments with their values.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 *
 	 * @param  string $filename
 	 * @param  array  $arg_values

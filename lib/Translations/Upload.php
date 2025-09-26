@@ -8,7 +8,7 @@ use TwentySixB\Translations\Exceptions\SourceFileNotFound;
 /**
  * Class for dealing with the import of tranlations to localise.
  *
- * @since      0.0.0
+ * @since      1.0.0
  * @package    TODO:
  * @subpackage TODO:
  * @author     TODO:
@@ -18,7 +18,7 @@ class Upload extends ServiceBase {
 	/**
 	 * Keys that are accepted for importing/uploading a locale.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	const ACCEPTED_IMPORT_KEYS = [
@@ -39,7 +39,7 @@ class Upload extends ServiceBase {
 	/**
 	 * Import files into localize.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @return void
 	 * @throws AuthorizationFailed
 	 * @throws FilenameArgumentNotAvailable
@@ -68,7 +68,7 @@ class Upload extends ServiceBase {
 	/**
 	 * Make the config for importing a locale for a specific project.
 	 *
-	 * @since  0.0.0
+	 * @since  1.0.0
 	 * @param  string $locale  Locale to import.
 	 * @return array
 	 */
@@ -89,7 +89,7 @@ class Upload extends ServiceBase {
 	/**
 	 * Load data from files to import.
 	 *
-	 * @since 0.0.0
+	 * @since 1.0.0
 	 * @param  string $locale  Locale to import.
 	 * @return string
 	 * @throws SourceFileNotFound
