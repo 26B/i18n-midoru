@@ -10,6 +10,9 @@ use TwentySixB\Translations\Translations\Upload;
 
 /**
  * Main operation class.
+ *
+ * @package    TwentySixB\Translations
+ * @author     26B <hello@26b.io>
  */
 class Translations {
 
