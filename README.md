@@ -182,6 +182,9 @@ path ?(domain|filename-) locale ?(-js-handle) .ext
 - `destination`
   - `string`
   - Destination path for the `wp i18n make-pots` command. Where the pot file will be saved.
+- `filename`
+  - `string`
+  - Destination file name for the `wp i18n make-pots` command. To be placed in the `destination` folder..
 - `skip-js`:
   - `bool` | `optional` | `default:` true
   - Whether the option `--skip-js` will be passed to the `wp i18n make-pots` command. Makes it so strings to be translated inside JS code will not be considered.
